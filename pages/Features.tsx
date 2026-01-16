@@ -12,19 +12,19 @@ const FeaturesPage: React.FC = () => {
     <div className="bg-white pt-32 pb-20 font-brand">
       <SEO 
         title="Funcionalidades" 
-        description="Explore as ferramentas que tornam o ImoSuite o sistema imobiliário mais avançado: CRM de leads, portais automáticos e Inteligência Artificial." 
+        description="Explore las herramientas que convierten a ImoSuite en el sistema inmobiliario más avanzado: CRM de leads, portales automáticos e Inteligencia Artificial." 
       />
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-24">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-blue-600 text-xs font-black mb-6 uppercase tracking-wider">
-            <Star size={14} fill="currentColor" /> Potência Máxima
+            <Star size={14} fill="currentColor" /> Potencia Máxima
           </div>
           <h1 className="text-4xl md:text-6xl font-black text-[#1c2d51] mb-6 tracking-tighter">
-            Potencialize a sua operação imobiliária.
+            Potencie su operación inmobiliaria.
           </h1>
           <p className="text-xl text-slate-500 max-w-3xl mx-auto font-medium leading-relaxed">
-            Centralize imóveis, contactos e processos comerciais num único sistema criado especificamente para consultores e imobiliárias que não têm tempo a perder.
+            Centralice inmuebles, contactos y procesos comerciales en un único sistema creado específicamente para consultores e inmobiliarias que no tienen tiempo que perder.
           </p>
         </div>
 
@@ -32,30 +32,30 @@ const FeaturesPage: React.FC = () => {
         <div className="mb-24">
           <div className="flex items-center gap-4 mb-12">
             <div className="h-px flex-1 bg-slate-100"></div>
-            <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Gestão & Operação</h2>
+            <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Gestión & Operación</h2>
             <div className="h-px flex-1 bg-slate-100"></div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <FeatureCard 
               icon={<Globe />} 
-              title="Site Próprio" 
-              desc="Tenha um site imobiliário profissional, sempre atualizado com os seus imóveis, pronto para gerar contactos sem esforço técnico."
+              title="Sitio Web Propio" 
+              desc="Tenga un sitio inmobiliario profesional, siempre actualizado con sus inmuebles, listo para generar contactos sin esfuerzo técnico."
             />
             <FeatureCard 
               icon={<Building2 />} 
-              title="Gestão de Imóveis" 
-              desc="Crie, edite e publique imóveis em poucos cliques, com controlo total do estado de cada negócio."
+              title="Gestión de Inmuebles" 
+              desc="Cree, edite y publique inmuebles en pocos clics, con control total del estado de cada negocio."
             />
             <FeatureCard 
               icon={<MessageSquare />} 
-              title="Gestão de Leads" 
-              desc="Todos os contactos organizados num único painel, com histórico completo e acompanhamento de cada oportunidade."
+              title="Gestión de Leads" 
+              desc="Todos los contactos organizados en un único panel, con historial completo y seguimiento de cada oportunidad."
             />
             <FeatureCard 
               icon={<Users />} 
-              title="Gestão de Equipa" 
-              desc="Distribua leads, defina permissões e acompanhe o desempenho da sua equipa comercial em tempo real."
+              title="Gestión de Equipo" 
+              desc="Distribuya leads, defina permisos y siga el desempeño de su equipo comercial en tiempo real."
             />
           </div>
         </div>
@@ -64,7 +64,7 @@ const FeaturesPage: React.FC = () => {
         <div className="mb-32">
           <div className="flex items-center gap-4 mb-12">
             <div className="h-px flex-1 bg-slate-100"></div>
-            <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Produtividade & Tecnologia</h2>
+            <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Productividad & Tecnología</h2>
             <div className="h-px flex-1 bg-slate-100"></div>
           </div>
           
@@ -72,22 +72,22 @@ const FeaturesPage: React.FC = () => {
             <FeatureCard 
               icon={<Zap />} 
               title="IA Generativa" 
-              desc="Crie descrições comerciais profissionais em segundos e publique imóveis mais rápido, sem perder tempo a escrever textos."
+              desc="Cree descripciones comerciales profesionales en segundos y publique inmuebles más rápido, sin perder tiempo escribiendo textos."
             />
             <FeatureCard 
               icon={<Check />} 
-              title="White Label" 
-              desc="Trabalhe com a sua própria marca, domínio e identidade visual, como se o sistema fosse seu."
+              title="Marca Blanca" 
+              desc="Trabaje con su propia marca, dominio e identidad visual, como si el sistema fuera suyo."
             />
             <FeatureCard 
               icon={<Smartphone />} 
               title="Mobile First" 
-              desc="Gere imóveis, responda a clientes e acompanhe leads diretamente no telemóvel, em qualquer lugar."
+              desc="Gestione inmuebles, responda a clientes y siga leads directamente en el móvil, en cualquier lugar."
             />
             <FeatureCard 
               icon={<ShieldCheck />} 
-              title="Segurança de Dados" 
-              desc="Os dados da sua imobiliária ficam totalmente isolados e protegidos, garantindo privacidade absoluta."
+              title="Seguridad de Datos" 
+              desc="Los datos de su inmobiliaria quedan totalmente aislados y protegidos, garantizando privacidad absoluta."
             />
           </div>
         </div>
@@ -97,10 +97,10 @@ const FeaturesPage: React.FC = () => {
           <div className="absolute top-0 right-0 w-64 h-64 bg-[#357fb2] rounded-full blur-[120px] opacity-20 -translate-y-1/2 translate-x-1/2"></div>
           <div className="relative z-10">
             <p className="text-xl md:text-2xl font-black mb-12 opacity-90">
-              Tudo o que precisa para gerir e vender imóveis, num único sistema.
+              Todo lo que necesita para gestionar y vender inmuebles, en un único sistema.
             </p>
             <Link to="/planos" className="inline-flex items-center gap-3 bg-white text-[#1c2d51] px-12 py-6 rounded-2xl font-black text-xl shadow-2xl hover:scale-105 transition-all">
-              Ver Planos e Preços <ArrowRight />
+              Ver Planes y Precios <ArrowRight />
             </Link>
           </div>
         </div>

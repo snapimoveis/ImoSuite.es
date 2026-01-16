@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { collection, query, where, getDocs, limit } from "firebase/firestore";
@@ -47,7 +48,7 @@ const PublicImoveis: React.FC = () => {
   }, [slug]);
 
   if (loading) return <div className="h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin text-[var(--primary)]" size={48} /></div>;
-  if (!tenant) return <div className="h-screen flex items-center justify-center font-black">Agência não encontrada</div>;
+  if (!tenant) return <div className="h-screen flex items-center justify-center font-black">Agencia no encontrada</div>;
 
   const cms = tenant.cms || DEFAULT_TENANT_CMS;
   const tid = tenant.template_id || 'heritage';
@@ -77,12 +78,12 @@ const PublicImoveis: React.FC = () => {
   const filtered = imoveis.filter(i => i.titulo.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
-    <div className="font-brand min-h-screen flex flex-col bg-white">
-      <SEO title={`Imóveis - ${tenant.nome}`} overrideFullTitle={true} />
+    <div className="font-brand min-h-screen flex flex-col bg-white selection:bg-[var(--primary)] selection:text-white">
+      <SEO title={`Inmuebles - ${tenant.nome}`} overrideFullTitle={true} />
       <nav className={s.nav}>
          <Link to={`/agencia/${tenant.slug}`}>{tenant.logo_url ? <img src={tenant.logo_url} className="h-10 w-auto" alt={tenant.nome}/> : <span className="font-black">{tenant.nome}</span>}</Link>
          <div className="hidden lg:flex gap-8">{cms.menus.main.map(m => renderLink(m, "text-[10px] font-black uppercase tracking-widest opacity-60 hover:opacity-100 transition-all"))}</div>
-         <button onClick={() => setIsMenuOpen(true)} className="lg:hidden p-2"><Menu size={28}/></button>
+         <button onClick={() => setIsMenuOpen(true)} className="lg:hidden p-2 text-slate-400"><Menu size={28}/></button>
       </nav>
 
       {isMenuOpen && (
@@ -93,11 +94,11 @@ const PublicImoveis: React.FC = () => {
       )}
 
       <main className="flex-1 max-w-7xl mx-auto px-6 py-12 w-full animate-in fade-in">
-        <h1 className="text-4xl md:text-6xl font-black text-[#1c2d51] tracking-tighter mb-12">Portfólio de Imóveis</h1>
-        <div className="bg-slate-50 p-6 rounded-[2rem] mb-12 flex items-center gap-4"><Search className="text-slate-300" size={20}/><input placeholder="Procurar imóveis..." className="bg-transparent outline-none w-full font-bold text-slate-700" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} /></div>
+        <h1 className="text-4xl md:text-6xl font-black text-[#1c2d51] tracking-tighter mb-12 uppercase">Cartera de Inmuebles</h1>
+        <div className="bg-slate-50 p-6 rounded-[2rem] mb-12 flex items-center gap-4"><Search className="text-slate-300" size={20}/><input placeholder="Buscar inmuebles..." className="bg-transparent outline-none w-full font-bold text-slate-700" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} /></div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
            {filtered.map(i => <ImovelCard key={i.id} imovel={i} />)}
-           {filtered.length === 0 && <div className="col-span-full py-20 text-center text-slate-300 font-bold uppercase tracking-widest">Nenhum imóvel encontrado.</div>}
+           {filtered.length === 0 && <div className="col-span-full py-20 text-center text-slate-300 font-bold uppercase tracking-widest">No se encontraron inmuebles.</div>}
         </div>
       </main>
 
@@ -105,11 +106,11 @@ const PublicImoveis: React.FC = () => {
          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16">
             <div className="space-y-6"><h4 className="text-xl font-black uppercase tracking-tight">{tenant.nome}</h4><p className="text-sm opacity-60 leading-relaxed">{tenant.slogan}</p></div>
             <div className="space-y-4">
-               <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Navegação</p>
+               <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Navegación</p>
                <div className="flex flex-col gap-2">{cms.menus.main.map(m => renderLink(m, "text-sm font-bold opacity-70 hover:opacity-100 transition-opacity"))}</div>
             </div>
             <div className="space-y-4">
-               <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Conformidade Legal</p>
+               <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Cumplimiento Legal</p>
                <div className="flex flex-col gap-2">{cms.menus.footer.map(m => renderLink(m, "text-sm font-bold opacity-70 hover:opacity-100 transition-opacity"))}</div>
             </div>
          </div>
