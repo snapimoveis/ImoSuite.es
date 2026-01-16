@@ -35,19 +35,18 @@ const Register: React.FC = () => {
     setError(null);
 
     try {
-      const uniqueSlug = await generateUniqueSlug(formData.agencyName);
-      
-      // 1. Crear usuario en Auth
+      // 1. Criar utilizador no Auth PRIMEIRO para garantir sessão ativa para as operações seguintes
       const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       const user = userCredential.user;
       await updateProfile(user, { displayName: formData.agencyName });
 
-      // 2. Definir IDs
+      // 2. Agora autenticados, geramos o slug único e IDs
+      const uniqueSlug = await generateUniqueSlug(formData.agencyName);
       const tenantId = `tnt_${user.uid.slice(0, 12)}`;
       const trialEndsAt = new Date();
       trialEndsAt.setDate(trialEndsAt.getDate() + 14);
 
-      // 3. Crear documento de la inmobiliaria (Tenant)
+      // 3. Criar documento da imobiliária (Tenant)
       const tenantData = {
         id: tenantId,
         nome: formData.agencyName,
@@ -68,7 +67,7 @@ const Register: React.FC = () => {
 
       await setDoc(doc(db, 'tenants', tenantId), tenantData);
 
-      // 4. Crear documento del usuario con el tenantId (Vínculo Crítico)
+      // 4. Criar documento do utilizador com o tenantId (Vínculo Crítico)
       await setDoc(doc(db, 'users', user.uid), {
         id: user.uid,
         displayName: formData.agencyName,
@@ -81,13 +80,14 @@ const Register: React.FC = () => {
       setSuccess(true);
       setTimeout(() => {
         navigate('/admin');
-      }, 2000);
+      }, 1500);
 
     } catch (err: any) {
       console.error("Error en registro:", err);
       let msg = "Ocurrió un error al crear la cuenta.";
       if (err.code === 'auth/email-already-in-use') msg = "Este correo ya está registrado.";
       if (err.code === 'auth/weak-password') msg = "La contraseña debe tener al menos 6 caracteres.";
+      if (err.code === 'permission-denied') msg = "Error de permiso en la base de datos. Verifica las reglas en la consola de Firebase.";
       setError(msg);
       setIsLoading(false);
     }

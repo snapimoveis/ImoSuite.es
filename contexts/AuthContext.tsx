@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
-import { doc, onSnapshot, getDoc } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { auth, db } from '../lib/firebase';
 
 interface UserProfile {
@@ -31,30 +31,42 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isSessionReady, setIsSessionReady] = useState(false);
 
   useEffect(() => {
-    const unsubscribeAuth = onAuthStateChanged(auth, async (currentUser) => {
+    const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       
       if (currentUser) {
-        // Cargar perfil desde Firestore (Fuente única de verdad para el tenantId)
         const profileRef = doc(db, 'users', currentUser.uid);
         
+        // Usamos um listener resiliente
         const unsubscribeProfile = onSnapshot(profileRef, (docSnap) => {
           if (docSnap.exists()) {
             setProfile(docSnap.data() as UserProfile);
+            setIsSessionReady(true);
+            setLoading(false);
           } else {
-            // Caso de error: Usuario en Auth pero sin documento en Firestore
-            console.error("No se encontró el perfil del usuario en Firestore.");
+            // Se o documento ainda não existir (comum durante o registo), 
+            // não damos erro imediato, apenas aguardamos o próximo snapshot
+            console.debug("Aguardando criação do documento de perfil...");
             setProfile(null);
+            
+            // Timeout de segurança para não ficar preso se houver erro real de criação
+            const timer = setTimeout(() => {
+              if (!docSnap.exists()) {
+                setIsSessionReady(true);
+                setLoading(false);
+              }
+            }, 5000);
+            return () => clearTimeout(timer);
           }
-          setIsSessionReady(true);
-          setLoading(false);
         }, (error) => {
-          console.error("Error al escuchar perfil:", error);
+          // Ignoramos erros de permissão se o documento ainda não existir (race condition)
           if (error.code === 'permission-denied') {
-            alert("No tienes permisos para acceder a estos datos.");
+            console.warn("Permissão negada temporária no perfil. Provável criação em curso.");
+          } else {
+            console.error("Erro no perfil:", error);
           }
-          setLoading(false);
           setIsSessionReady(true);
+          setLoading(false);
         });
 
         return () => unsubscribeProfile();
