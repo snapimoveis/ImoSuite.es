@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { PropertyService } from '../../services/propertyService';
 import { useAuth } from '../../contexts/AuthContext';
@@ -200,6 +201,23 @@ const AdminImoveis: React.FC = () => {
     i.titulo.toLowerCase().includes(searchQuery.toLowerCase()) || 
     i.ref.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Helper para formatar data pro input[type="date"] evitando RangeError
+  const getInputDateValue = (dateVal: any) => {
+    if (!dateVal) return '';
+    try {
+      let d: Date;
+      if (dateVal && typeof dateVal === 'object' && 'seconds' in dateVal) {
+        d = new Date(dateVal.seconds * 1000);
+      } else {
+        d = new Date(dateVal);
+      }
+      if (isNaN(d.getTime())) return '';
+      return d.toISOString().split('T')[0];
+    } catch (e) {
+      return '';
+    }
+  };
 
   return (
     <div className="space-y-8 font-brand animate-in fade-in duration-500 pb-20">
@@ -567,7 +585,7 @@ const AdminImoveis: React.FC = () => {
                               <div className="flex flex-wrap gap-2">
                                  {['Agua', 'Luz', 'Gas', 'Internet', 'TV'].map(d => (
                                    <button key={d} onClick={() => {
-                                      const current = editingImovel.financeiro?.despesas_incluidas || [];
+                                      const current = editingImovel.financeiro?.despesas_included || [];
                                       const next = current.includes(d) ? current.filter(x => x !== d) : [...current, d];
                                       setEditingImovel({...editingImovel, financeiro: {...editingImovel.financeiro!, despesas_incluidas: next}});
                                    }} className={`px-4 py-2 rounded-lg text-[9px] font-black uppercase border transition-all ${editingImovel.financeiro?.despesas_incluidas?.includes(d) ? 'border-[#357fb2] bg-[#357fb2] text-white' : 'border-slate-100 text-slate-400'}`}>
@@ -688,7 +706,12 @@ const AdminImoveis: React.FC = () => {
                              <label className="admin-label">Fecha de Publicación</label>
                              <div className="relative">
                                 <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
-                                <input type="date" className="admin-input-v3 pl-12" value={editingImovel.publicacao?.data_publicacao ? new Date(editingImovel.publicacao.data_publicacao).toISOString().split('T')[0] : ''} onChange={e => setEditingImovel({...editingImovel, publicacao: {...editingImovel.publicacao!, data_publicacao: new Date(e.target.value)}})} />
+                                <input 
+                                  type="date" 
+                                  className="admin-input-v3 pl-12" 
+                                  value={getInputDateValue(editingImovel.publicacao?.data_publicacao)} 
+                                  onChange={e => setEditingImovel({...editingImovel, publicacao: {...editingImovel.publicacao!, data_publicacao: e.target.value ? new Date(e.target.value) : null}})} 
+                                />
                              </div>
                           </div>
                           <div className="p-6 bg-blue-50 rounded-2xl border border-blue-100 flex items-start gap-4">

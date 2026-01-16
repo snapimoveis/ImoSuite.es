@@ -1,3 +1,4 @@
+
 // Modular Firestore imports for Firebase v9+
 import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from './firebase';
@@ -11,17 +12,32 @@ export function formatCurrency(value: number | null | undefined): string {
   }).format(value);
 }
 
-export function formatDate(dateString: any): string {
-  if (!dateString) return 'N/A';
+export function formatDate(dateValue: any): string {
+  if (!dateValue) return 'N/A';
   try {
-    const d = typeof dateString === 'string' ? new Date(dateString) : dateString.toDate?.() || new Date(dateString);
+    let d: Date;
+    
+    // Tratamento para Firestore Timestamp
+    if (dateValue && typeof dateValue === 'object' && 'seconds' in dateValue) {
+      d = new Date(dateValue.seconds * 1000);
+    } else if (dateValue instanceof Date) {
+      d = dateValue;
+    } else {
+      d = new Date(dateValue);
+    }
+
+    // Verifica se a data resultante é válida
+    if (isNaN(d.getTime())) {
+      return 'Fecha inválida';
+    }
+
     return new Intl.DateTimeFormat('es-ES', {
       day: '2-digit',
       month: 'short',
       year: 'numeric'
     }).format(d);
   } catch (e) {
-    return 'Fecha inválida';
+    return 'Error en fecha';
   }
 }
 
