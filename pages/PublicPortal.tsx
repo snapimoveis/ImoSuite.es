@@ -65,7 +65,7 @@ const PublicPortal: React.FC = () => {
   }, [slug]);
 
   if (loading) return <div className="h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin text-[var(--primary)]" size={48} /></div>;
-  if (!tenant) return <div className="h-screen flex flex-col items-center justify-center p-10 font-brand"><Building2 size={48} className="text-slate-100 mb-4"/><h2 className="text-xl font-black">Agência não encontrada.</h2><Link to="/" className="text-blue-500 mt-4 underline">Voltar</Link></div>;
+  if (!tenant) return <div className="h-screen flex flex-col items-center justify-center p-10 font-brand"><Building2 size={48} className="text-slate-100 mb-4"/><h2 className="text-xl font-black">Agencia no encontrada.</h2><Link to="/" className="text-blue-500 mt-4 underline">Volver</Link></div>;
 
   const cms = tenant.cms || DEFAULT_TENANT_CMS;
   const tid = tenant.template_id || 'heritage';
@@ -130,7 +130,7 @@ const PublicPortal: React.FC = () => {
                <div className="relative z-10 text-white max-w-4xl">
                   <h1 className="text-4xl md:text-8xl font-black mb-6 leading-tight tracking-tighter">{section.content.title}</h1>
                   <p className="text-lg md:text-xl opacity-80 mb-10">{section.content.subtitle}</p>
-                  <Link to={`/agencia/${tenant.slug}/imoveis`} className="bg-white text-black px-12 py-5 rounded-2xl font-black uppercase text-xs shadow-2xl">Ver Imóveis</Link>
+                  <Link to={`/agencia/${tenant.slug}/imoveis`} className="bg-white text-black px-12 py-5 rounded-2xl font-black uppercase text-xs shadow-2xl">Ver Inmuebles</Link>
                </div>
             </section>
           );
@@ -144,11 +144,11 @@ const PublicPortal: React.FC = () => {
           );
           if (section.type === 'about_mini') return (
             <section key={section.id} className="py-24 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-               <div className="aspect-square bg-slate-100 rounded-3xl overflow-hidden"><img src={section.content.image_url} className="w-full h-full object-cover" /></div>
+               <div className="aspect-square bg-slate-100 rounded-3xl overflow-hidden"><img src={section.content.image_url} className="w-full h-full object-cover" alt="Sobre nosotros" /></div>
                <div className="space-y-6">
                   <h2 className={`text-3xl md:text-4xl ${s.heading}`}>{section.content.title}</h2>
                   <p className="text-lg text-slate-500 leading-relaxed">{section.content.text}</p>
-                  <Link to={`/agencia/${tenant.slug}/p/quem-somos`} className="text-xs font-black uppercase tracking-widest text-[var(--primary)] border-b-2 border-current pb-1">Saber Mais</Link>
+                  <Link to={`/agencia/${tenant.slug}/p/quem-somos`} className="text-xs font-black uppercase tracking-widest text-[var(--primary)] border-b-2 border-current pb-1">Saber más</Link>
                </div>
             </section>
           );
@@ -164,13 +164,13 @@ const PublicPortal: React.FC = () => {
                <p className="text-sm opacity-60 leading-relaxed">{tenant.slogan}</p>
             </div>
             <div className="space-y-4">
-               <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Menu</p>
+               <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Menú</p>
                <div className="flex flex-col gap-2">
                   {cms.menus.main.map(m => renderLink(m, "text-sm font-bold opacity-70 hover:opacity-100 transition-opacity"))}
                </div>
             </div>
             <div className="space-y-4">
-               <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Conformidade Legal</p>
+               <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Conformidad Legal</p>
                <div className="flex flex-col gap-2">
                   {cms.menus.footer.map(m => renderLink(m, "text-sm font-bold opacity-70 hover:opacity-100 transition-opacity"))}
                </div>

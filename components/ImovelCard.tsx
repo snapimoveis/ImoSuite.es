@@ -27,15 +27,13 @@ const ImovelCard: React.FC<ImovelCardProps> = ({ imovel }) => {
     luxe: "bg-white rounded-[3.5rem] border border-[#EAE3D9] shadow-sm"
   };
 
+  const operationLabel = imovel.operacao === 'venda' ? 'Venta' : imovel.operacao === 'arrendamento' ? 'Alquiler' : 'Venta / Alquiler';
+
   return (
     <Link 
       to={`/agencia/${targetSlug}/imovel/${imovel.slug}`} 
       className={`group overflow-hidden transition-all duration-500 flex flex-col h-full ${cardStyles[tid] || cardStyles.heritage}`}
     >
-      {/* 
-        Fix: Changed 'luxury' to 'prestige' as 'luxury' is not a valid template_id in the Tenant type definition. 
-        'prestige' is the intended template for high-end vertical aspect ratio cards as seen in AdminSettings.
-      */}
       <div className={`relative overflow-hidden bg-slate-100 ${tid === 'prestige' ? 'aspect-[3/4]' : 'h-64'}`}>
         <img 
           src={mainImage} 
@@ -45,7 +43,7 @@ const ImovelCard: React.FC<ImovelCardProps> = ({ imovel }) => {
         
         <div className="absolute top-4 left-4 flex gap-2">
            <div className={`px-3 py-1 rounded-full text-[8px] font-black uppercase shadow-lg ${tid === 'prestige' ? 'bg-white text-black' : 'bg-[#1c2d51] text-white'}`}>
-             {imovel.operacao}
+             {operationLabel}
            </div>
         </div>
 

@@ -13,19 +13,19 @@ export const DashboardMockup: React.FC = () => {
         </div>
         <nav className="flex-1 px-2 space-y-1">
           <div className="flex items-center gap-2 p-2 bg-[#1c2d51] text-white rounded-lg font-bold">
-            <BarChart3 size={14} /> <span>Dashboard</span>
+            <BarChart3 size={14} /> <span>Panel Control</span>
           </div>
           <div className="flex items-center gap-2 p-2 text-slate-500 font-bold hover:bg-slate-50 rounded-lg">
-            <Building2 size={14} /> <span>Imóveis</span>
+            <Building2 size={14} /> <span>Inmuebles</span>
           </div>
           <div className="flex items-center gap-2 p-2 text-slate-500 font-bold hover:bg-slate-50 rounded-lg">
             <MessageSquare size={14} /> <span>Leads</span>
           </div>
           <div className="flex items-center gap-2 p-2 text-slate-500 font-bold hover:bg-slate-50 rounded-lg">
-            <Users size={14} /> <span>Utilizadores</span>
+            <Users size={14} /> <span>Usuarios</span>
           </div>
           <div className="flex items-center gap-2 p-2 text-slate-500 font-bold hover:bg-slate-50 rounded-lg">
-            <Settings size={14} /> <span>Configurações</span>
+            <Settings size={14} /> <span>Configuración</span>
           </div>
         </nav>
       </aside>
@@ -34,12 +34,12 @@ export const DashboardMockup: React.FC = () => {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Topbar */}
         <header className="h-10 bg-white border-b border-slate-100 flex items-center justify-between px-4">
-          <div className="text-[8px] text-slate-400">Painel de Controlo / <span className="text-slate-600 font-bold">Dashboard</span></div>
+          <div className="text-[8px] text-slate-400">Backoffice / <span className="text-slate-600 font-bold uppercase">Dashboard</span></div>
           <div className="flex items-center gap-3">
             <Bell size={12} className="text-slate-300" />
             <div className="flex items-center gap-2">
               <div className="text-right leading-none">
-                <div className="font-bold text-[#1c2d51]">Admin User</div>
+                <div className="font-bold text-[#1c2d51]">Usuario Admin</div>
                 <div className="text-[6px] text-slate-400">Administrador</div>
               </div>
               <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-500">A</div>
@@ -51,16 +51,16 @@ export const DashboardMockup: React.FC = () => {
         <main className="p-4 space-y-4 overflow-y-auto">
           <div>
             <h2 className="text-base font-black text-[#1c2d51]">Dashboard</h2>
-            <p className="text-slate-400 text-[8px]">Bem-vindo à área de gestão do ImoSuite.</p>
+            <p className="text-slate-400 text-[8px]">Bienvenido al área de gestión de ImoSuite.</p>
           </div>
 
           {/* Stat Cards */}
           <div className="grid grid-cols-4 gap-3">
             {[
-              { label: 'Imóveis Ativos', val: '124', change: '+12%', color: 'text-blue-600', bg: 'bg-blue-50', icon: <Building2 size={14}/> },
-              { label: 'Leads (Mês)', val: '48', change: '+5%', color: 'text-emerald-600', bg: 'bg-emerald-50', icon: <MessageSquare size={14}/> },
-              { label: 'Visitas Site', val: '2.4k', change: '-2%', color: 'text-orange-600', bg: 'bg-orange-50', icon: <Eye size={14}/> },
-              { label: 'Novos Utilizadores', val: '12', change: '+18%', color: 'text-purple-600', bg: 'bg-purple-50', icon: <Users size={14}/> },
+              { label: 'Inmuebles Activos', val: '124', change: '+12%', color: 'text-blue-600', bg: 'bg-blue-50', icon: <Building2 size={14}/> },
+              { label: 'Leads (Mes)', val: '48', change: '+5%', color: 'text-emerald-600', bg: 'bg-emerald-50', icon: <MessageSquare size={14}/> },
+              { label: 'Visitas Web', val: '2.4k', change: '-2%', color: 'text-orange-600', bg: 'bg-orange-50', icon: <Eye size={14}/> },
+              { label: 'Nuevos Usuarios', val: '12', change: '+18%', color: 'text-purple-600', bg: 'bg-purple-50', icon: <Users size={14}/> },
             ].map((s, i) => (
               <div key={i} className="bg-white p-3 rounded-xl border border-slate-100">
                 <div className="flex justify-between items-start mb-2">
@@ -77,7 +77,7 @@ export const DashboardMockup: React.FC = () => {
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-white p-4 rounded-xl border border-slate-100">
                <div className="flex justify-between items-center mb-4">
-                  <span className="font-black text-[#1c2d51] text-[10px]">Crescimento de Leads</span>
+                  <span className="font-black text-[#1c2d51] text-[10px]">Crecimiento de Leads</span>
                   <div className="text-[8px] bg-slate-50 px-2 py-1 rounded">Últimos 6 meses</div>
                </div>
                <div className="h-24 flex items-end gap-1 px-2">
@@ -91,8 +91,8 @@ export const DashboardMockup: React.FC = () => {
             </div>
             <div className="bg-white p-4 rounded-xl border border-slate-100">
                <div className="flex justify-between items-center mb-4">
-                  <span className="font-black text-[#1c2d51] text-[10px]">Visualizações de Imóveis</span>
-                  <span className="text-[8px] text-[#357fb2] font-black">Ver relatório</span>
+                  <span className="font-black text-[#1c2d51] text-[10px]">Vistas de Inmuebles</span>
+                  <span className="text-[8px] text-[#357fb2] font-black uppercase">Ver informe</span>
                </div>
                <div className="h-24 flex items-end gap-2 px-2">
                   {[30, 20, 100, 45, 55, 40, 50].map((h, i) => (

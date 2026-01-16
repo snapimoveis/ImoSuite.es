@@ -22,7 +22,7 @@ const Login: React.FC = () => {
       navigate('/admin');
     } catch (err: any) {
       console.error(err);
-      setError('Credenciais inválidas ou problema de ligação.');
+      setError('Credenciales inválidas o problema de conexión.');
     } finally {
       setIsLoading(false);
     }
@@ -30,14 +30,14 @@ const Login: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center py-20 px-6 font-brand">
-      <SEO title="Iniciar Sessão" description="Aceda à sua conta ImoSuite e faça a gestão do seu inventário imobiliário." />
+      <SEO title="Iniciar Sesión" description="Acceda a su cuenta ImoSuite y gestione su inventario inmobiliario." />
       <div className="max-w-md w-full space-y-10 bg-white p-12 rounded-[3rem] shadow-2xl border border-slate-100">
         <div className="text-center">
           <div className="mx-auto h-16 w-16 bg-[#1c2d51] rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg shadow-[#1c2d51]/20">
             <Building2 size={28} />
           </div>
-          <h2 className="text-3xl font-black text-[#1c2d51] tracking-tighter">Bem-vindo de volta</h2>
-          <p className="mt-2 text-slate-400 font-bold uppercase text-[10px] tracking-widest">Aceda ao seu painel ImoSuite</p>
+          <h2 className="text-3xl font-black text-[#1c2d51] tracking-tighter">Bienvenido de nuevo</h2>
+          <p className="mt-2 text-slate-400 font-bold uppercase text-[10px] tracking-widest">Acceda a su panel ImoSuite</p>
         </div>
 
         {error && (
@@ -65,7 +65,7 @@ const Login: React.FC = () => {
               <input
                 required
                 type="password"
-                placeholder="Palavra-passe"
+                placeholder="Contraseña"
                 className="w-full pl-14 pr-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#1c2d51] outline-none font-bold transition-all"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -86,7 +86,7 @@ const Login: React.FC = () => {
 
         <div className="text-center pt-4">
           <p className="text-sm font-bold text-slate-400">
-            Não tem uma conta? <Link to="/register" className="text-[#357fb2] hover:underline">Registe-se gratuitamente</Link>
+            ¿No tienes cuenta? <Link to="/register" className="text-[#357fb2] hover:underline">Regístrate gratis</Link>
           </p>
         </div>
       </div>

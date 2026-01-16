@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTenant } from '../../contexts/TenantContext';
@@ -13,11 +14,11 @@ import { Logo } from '../../components/Logo';
 import { generateAgencySlogan } from '../../services/geminiService';
 
 const TEMPLATES = [
-  { id: 'heritage', name: 'Heritage', icon: <Building2 />, color: '#1c2d51', description: 'Tradição e confiança com um toque formal.' },
-  { id: 'canvas', name: 'Canvas', icon: <Layout />, color: '#357fb2', description: 'Design moderno, limpo e funcional.' },
-  { id: 'prestige', name: 'Prestige', icon: <Star />, color: '#000000', description: 'Luxo e Minimalismo absoluto.' },
-  { id: 'skyline', name: 'Skyline', icon: <Zap />, color: '#2563eb', description: 'Urbano, tecnológico e focado em leads.' },
-  { id: 'luxe', name: 'Luxe', icon: <Brush />, color: '#2D2926', description: 'Artístico, curadoria e foco em lifestyle.' }
+  { id: 'heritage', name: 'Heritage', icon: <Building2 />, color: '#1c2d51', description: 'Tradición y confianza con un toque formal.' },
+  { id: 'canvas', name: 'Canvas', icon: <Layout />, color: '#357fb2', description: 'Diseño moderno, limpio y funcional.' },
+  { id: 'prestige', name: 'Prestige', icon: <Star />, color: '#000000', description: 'Lujo y Minimalismo absoluto.' },
+  { id: 'skyline', name: 'Skyline', icon: <Zap />, color: '#2563eb', description: 'Urbano, tecnológico y enfocado en leads.' },
+  { id: 'luxe', name: 'Luxe', icon: <Brush />, color: '#2D2926', description: 'Artístico, curaduría y foco en el estilo de vida.' }
 ];
 
 const OnboardingFlow: React.FC = () => {
@@ -63,7 +64,7 @@ const OnboardingFlow: React.FC = () => {
       nextStep();
     } catch (err) {
       console.error(err);
-      alert("Erro ao finalizar configuração.");
+      alert("Error al finalizar la configuración.");
     } finally {
       setIsFinishing(false);
     }
@@ -88,16 +89,16 @@ const OnboardingFlow: React.FC = () => {
             <CheckCircle2 size={48} strokeWidth={2.5} className="animate-bounce" />
           </div>
           <div className="space-y-2">
-            <h2 className="text-4xl font-black text-[#1c2d51] tracking-tighter">Está Pronto!</h2>
+            <h2 className="text-4xl font-black text-[#1c2d51] tracking-tighter">¡Todo listo!</h2>
             <p className="text-slate-500 font-bold uppercase text-[10px] tracking-widest leading-relaxed">
-              O seu ecossistema imobiliário foi <br/> configurado com sucesso.
+              Su ecosistema inmobiliario ha sido <br/> configurado correctamente.
             </p>
           </div>
           <button 
             onClick={() => navigate('/admin')}
             className="w-full bg-[#1c2d51] text-white py-6 rounded-2xl font-black text-lg flex items-center justify-center gap-3 shadow-xl hover:-translate-y-1 transition-all"
           >
-            Entrar no Cockpit <ArrowRight />
+            Entrar al Cockpit <ArrowRight />
           </button>
         </div>
       </div>
@@ -109,7 +110,7 @@ const OnboardingFlow: React.FC = () => {
       <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-100 px-6 flex items-center justify-between z-50">
         <Logo size="sm" />
         <div className="flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">
-          <Clock size={14} /> Configuração Inicial
+          <Clock size={14} /> Configuración Inicial
         </div>
       </header>
 
@@ -118,9 +119,9 @@ const OnboardingFlow: React.FC = () => {
           <div className="flex justify-between items-end mb-4">
              <div>
                 <h1 className="text-3xl font-black text-[#1c2d51] tracking-tighter">
-                  {currentStep === 1 ? 'Identidade da Agência' : 'Visual & Template'}
+                  {currentStep === 1 ? 'Identidad de la Agencia' : 'Visual & Plantilla'}
                 </h1>
-                <p className="text-slate-400 font-bold uppercase text-[10px] tracking-widest mt-1">Passo {currentStep} de 2</p>
+                <p className="text-slate-400 font-bold uppercase text-[10px] tracking-widest mt-1">Paso {currentStep} de 2</p>
              </div>
              <div className="flex gap-2">
                 <div className={`h-2 w-12 rounded-full transition-all ${currentStep >= 1 ? 'bg-[#1c2d51]' : 'bg-slate-200'}`}></div>
@@ -134,7 +135,7 @@ const OnboardingFlow: React.FC = () => {
             <div className="bg-white p-10 rounded-[3rem] border border-slate-100 shadow-sm space-y-8">
                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase text-slate-400 ml-2">Nome Comercial</label>
+                    <label className="text-[10px] font-black uppercase text-slate-400 ml-2">Nombre Comercial</label>
                     <input 
                       className="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold text-[#1c2d51] border-2 border-transparent focus:border-blue-100 focus:bg-white transition-all" 
                       value={identity.name} 
@@ -151,13 +152,13 @@ const OnboardingFlow: React.FC = () => {
                   </div>
                   <div className="space-y-2 md:col-span-2">
                     <label className="text-[10px] font-black uppercase text-slate-400 ml-2 flex items-center gap-2">
-                      Slogan / Frase de Impacto 
-                      <span className="text-[8px] bg-blue-50 text-blue-500 px-2 py-0.5 rounded-full">AI Powered</span>
+                      Eslogan / Frase de Impacto 
+                      <span className="text-[8px] bg-blue-50 text-blue-500 px-2 py-0.5 rounded-full">Potenciado por IA</span>
                     </label>
                     <div className="relative">
                       <input 
                         className="w-full p-4 pr-14 bg-slate-50 rounded-2xl outline-none font-bold text-[#1c2d51] border-2 border-transparent focus:border-blue-100 focus:bg-white transition-all" 
-                        placeholder="Ex: A sua casa, o nosso compromisso."
+                        placeholder="Ej: Su casa, nuestro compromiso."
                         value={identity.slogan} 
                         onChange={e => setIdentity({...identity, slogan: e.target.value})} 
                       />
@@ -171,10 +172,10 @@ const OnboardingFlow: React.FC = () => {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase text-slate-400 ml-2">Telefone</label>
+                    <label className="text-[10px] font-black uppercase text-slate-400 ml-2">Teléfono</label>
                     <input 
                       className="w-full p-4 bg-slate-50 rounded-2xl outline-none font-bold text-[#1c2d51] border-2 border-transparent focus:border-blue-100 focus:bg-white transition-all" 
-                      placeholder="+351 900 000 000"
+                      placeholder="+34 900 000 000"
                       value={identity.phone} 
                       onChange={e => setIdentity({...identity, phone: e.target.value})} 
                     />
@@ -187,7 +188,7 @@ const OnboardingFlow: React.FC = () => {
                 onClick={nextStep}
                 className="bg-[#1c2d51] text-white px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-widest flex items-center gap-3 shadow-xl hover:-translate-y-1 transition-all"
               >
-                Próximo Passo <ArrowRight size={18} />
+                Siguiente Paso <ArrowRight size={18} />
               </button>
             </div>
           </div>
@@ -218,17 +219,17 @@ const OnboardingFlow: React.FC = () => {
             </div>
 
             <div className="bg-white p-10 rounded-[3rem] border border-slate-100 shadow-sm space-y-6">
-               <h3 className="font-black text-[#1c2d51] uppercase text-xs tracking-widest">Personalizar Cores</h3>
+               <h3 className="font-black text-[#1c2d51] uppercase text-xs tracking-widest">Personalizar Colores</h3>
                <div className="flex flex-wrap gap-10">
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase text-slate-400 ml-2">Cor Primária</label>
+                    <label className="text-[10px] font-black uppercase text-slate-400 ml-2">Color Primario</label>
                     <div className="flex items-center gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-100">
                       <input type="color" className="w-10 h-10 rounded-lg border-none cursor-pointer" value={identity.primaryColor} onChange={e => setIdentity({...identity, primaryColor: e.target.value})} />
                       <span className="font-black text-xs uppercase tracking-widest text-[#1c2d51]">{identity.primaryColor}</span>
                     </div>
                   </div>
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase text-slate-400 ml-2">Cor Secundária</label>
+                    <label className="text-[10px] font-black uppercase text-slate-400 ml-2">Color Secundario</label>
                     <div className="flex items-center gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-100">
                       <input type="color" className="w-10 h-10 rounded-lg border-none cursor-pointer" value={identity.secondaryColor} onChange={e => setIdentity({...identity, secondaryColor: e.target.value})} />
                       <span className="font-black text-xs uppercase tracking-widest text-[#1c2d51]">{identity.secondaryColor}</span>
@@ -242,14 +243,14 @@ const OnboardingFlow: React.FC = () => {
                 onClick={prevStep}
                 className="text-slate-400 font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:text-[#1c2d51] transition-all"
               >
-                <ChevronLeft size={18} /> Voltar
+                <ChevronLeft size={18} /> Volver
               </button>
               <button 
                 onClick={handleFinishOnboarding}
                 disabled={isFinishing}
                 className="bg-[#1c2d51] text-white px-12 py-5 rounded-2xl font-black text-sm uppercase tracking-[0.2em] flex items-center gap-3 shadow-xl hover:-translate-y-1 transition-all disabled:opacity-50"
               >
-                {isFinishing ? <Loader2 className="animate-spin" size={20} /> : <Zap size={20} />} Finalizar Configuração
+                {isFinishing ? <Loader2 className="animate-spin" size={20} /> : <Zap size={20} />} Finalizar Configuración
               </button>
             </div>
           </div>

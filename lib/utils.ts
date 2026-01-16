@@ -1,10 +1,11 @@
+
 // Modular Firestore imports for Firebase v9+
 import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from './firebase';
 
 export function formatCurrency(value: number | null | undefined): string {
-  if (value === undefined || value === null) return 'Sob Consulta';
-  return new Intl.NumberFormat('pt-PT', {
+  if (value === undefined || value === null) return 'A consultar';
+  return new Intl.NumberFormat('es-ES', {
     style: 'currency',
     currency: 'EUR',
     maximumFractionDigits: 0
@@ -15,13 +16,13 @@ export function formatDate(dateString: any): string {
   if (!dateString) return 'N/A';
   try {
     const d = typeof dateString === 'string' ? new Date(dateString) : dateString.toDate?.() || new Date(dateString);
-    return new Intl.DateTimeFormat('pt-PT', {
+    return new Intl.DateTimeFormat('es-ES', {
       day: '2-digit',
       month: 'short',
       year: 'numeric'
     }).format(d);
   } catch (e) {
-    return 'Data inválida';
+    return 'Fecha inválida';
   }
 }
 

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTenant } from '../../contexts/TenantContext.tsx';
@@ -45,12 +46,12 @@ const AdminShell: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   };
 
   const navItems = [
-    { name: 'Dashboard', path: '/admin', icon: <LayoutDashboard size={18} /> },
-    { name: 'Imóveis', path: '/admin/imoveis', icon: <Building2 size={18} /> },
-    { name: 'Website & CMS', path: '/admin/cms', icon: <Globe size={18} /> },
+    { name: 'Panel Control', path: '/admin', icon: <LayoutDashboard size={18} /> },
+    { name: 'Inmuebles', path: '/admin/imoveis', icon: <Building2 size={18} /> },
+    { name: 'Sitio Web & CMS', path: '/admin/cms', icon: <Globe size={18} /> },
     { name: 'Leads', path: '/admin/leads', icon: <MessageSquare size={18} />, badge: unreadCount },
-    { name: 'Utilizadores', path: '/admin/users', icon: <Users size={18} /> },
-    { name: 'Configurações', path: '/admin/settings', icon: <Settings size={18} /> },
+    { name: 'Usuarios', path: '/admin/users', icon: <Users size={18} /> },
+    { name: 'Configuración', path: '/admin/settings', icon: <Settings size={18} /> },
   ];
 
   const getBreadcrumb = () => {
@@ -106,11 +107,11 @@ const AdminShell: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
             <div className="relative z-10 text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <Sparkles size={12} className="text-yellow-400" />
-                <span className="text-[9px] font-black uppercase tracking-widest opacity-80">Período Trial</span>
+                <span className="text-[9px] font-black uppercase tracking-widest opacity-80">Periodo de Prueba</span>
               </div>
-              <p className="text-xl font-black tracking-tighter mb-1">{daysLeft} dias restantes</p>
+              <p className="text-xl font-black tracking-tighter mb-1">{daysLeft} días restantes</p>
               <Link to="/planos" className="block w-full bg-white/10 hover:bg-white/20 text-white py-2 rounded-lg text-center font-black text-[9px] uppercase tracking-widest transition-all mt-4 border border-white/20">
-                Fazer Upgrade
+                Mejorar Plan
               </Link>
             </div>
             <Zap size={60} className="absolute -right-4 -bottom-4 text-white opacity-5 rotate-12" />
@@ -120,15 +121,15 @@ const AdminShell: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         <div className="p-4 border-t border-slate-50">
           <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-red-500 transition-colors">
             <LogOut size={18} />
-            {!isCollapsed && <span className="font-bold text-sm tracking-tight">Terminar Sessão</span>}
+            {!isCollapsed && <span className="font-bold text-sm tracking-tight">Cerrar Sesión</span>}
           </button>
         </div>
       </aside>
 
       <div className="flex-1 flex flex-col min-w-0 h-screen">
-        {/* Header - Barra Superior com Widget de Perfil Fiel ao Screenshot */}
+        {/* Header - Barra Superior con Widget de Perfil Fiel ao Screenshot */}
         <header className="h-20 flex items-center justify-between px-10 shrink-0 bg-transparent relative z-50">
-          <div className="text-[10px] font-black tracking-[0.15em] text-slate-300">
+          <div className="text-[10px] font-black tracking-[0.15em] text-slate-300 uppercase">
             {getBreadcrumb()}
           </div>
           
@@ -151,7 +152,7 @@ const AdminShell: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
               >
                 <div className="text-right hidden sm:block">
                   <p className="text-xs font-black text-[#1c2d51] tracking-tight">
-                    {tenant.nome || 'Agência'}
+                    {tenant.nome || 'Agencia'}
                   </p>
                   <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-tight">
                     {profile?.role === 'admin' ? 'Administrador' : 'Consultor'}
@@ -175,16 +176,16 @@ const AdminShell: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
                 <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-2xl border border-slate-100 py-3 animate-in fade-in zoom-in-95 duration-200">
                   <Link to="/admin/profile" onClick={() => setShowProfileDropdown(false)} className="flex items-center gap-3 px-5 py-3 text-slate-600 hover:bg-slate-50 hover:text-[#1c2d51] transition-all">
                     <User size={16} className="text-slate-400" />
-                    <span className="text-sm font-bold">O Meu Perfil</span>
+                    <span className="text-sm font-bold">Mi Perfil</span>
                   </Link>
                   <Link to="/admin/settings" onClick={() => setShowProfileDropdown(false)} className="flex items-center gap-3 px-5 py-3 text-slate-600 hover:bg-slate-50 hover:text-[#1c2d51] transition-all">
                     <Settings size={16} className="text-slate-400" />
-                    <span className="text-sm font-bold">Configurações</span>
+                    <span className="text-sm font-bold">Configuración</span>
                   </Link>
                   <div className="h-px bg-slate-50 my-2 mx-5"></div>
                   <button onClick={handleLogout} className="w-full flex items-center gap-3 px-5 py-3 text-red-500 hover:bg-red-50 transition-all">
                     <LogOut size={16} className="text-red-400" />
-                    <span className="text-sm font-bold">Terminar Sessão</span>
+                    <span className="text-sm font-bold">Cerrar Sesión</span>
                   </button>
                 </div>
               )}
@@ -197,9 +198,9 @@ const AdminShell: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
             <div className="absolute inset-0 z-[60] bg-[#F4F7FA]/80 backdrop-blur-sm flex items-center justify-center p-6 animate-in fade-in duration-500">
                <div className="max-w-md w-full bg-white p-12 rounded-3xl shadow-2xl text-center border border-slate-100">
                   <div className="w-16 h-16 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6"><Zap size={32} /></div>
-                  <h2 className="text-2xl font-black text-[#1c2d51] tracking-tight">Período Expirado</h2>
-                  <p className="text-slate-500 font-medium mt-2 mb-8 leading-relaxed">O seu tempo de teste gratuito terminou. Subscreva um plano para continuar.</p>
-                  <Link to="/planos" className="block w-full bg-[#1c2d51] text-white py-4 rounded-xl font-black text-sm uppercase tracking-widest shadow-xl">Escolher Plano</Link>
+                  <h2 className="text-2xl font-black text-[#1c2d51] tracking-tight">Periodo Expirado</h2>
+                  <p className="text-slate-500 font-medium mt-2 mb-8 leading-relaxed">Su tiempo de prueba gratuita ha finalizado. Suscríbase a un plan para continuar.</p>
+                  <Link to="/planos" className="block w-full bg-[#1c2d51] text-white py-4 rounded-xl font-black text-sm uppercase tracking-widest shadow-xl">Elegir Plan</Link>
                </div>
             </div>
           )}

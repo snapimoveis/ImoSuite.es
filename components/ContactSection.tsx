@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Send, Loader2, CheckCircle2, ShieldCheck, MessageSquare } from 'lucide-react';
@@ -13,8 +14,8 @@ interface ContactSectionProps {
 
 const ContactSection: React.FC<ContactSectionProps> = ({ 
   tenantId, 
-  title = "Esclareça as suas dúvidas", 
-  subtitle = "Estamos disponíveis para o ajudar a encontrar o investimento ideal ou vender o seu imóvel pelo melhor valor.",
+  title = "Resuelva sus dudas", 
+  subtitle = "Estamos disponibles para ayudarle a encontrar la inversión ideal o vender su inmueble al mejor precio.",
   isWhiteLabel = false
 }) => {
   const { tenant } = useTenant();
@@ -29,13 +30,13 @@ const ContactSection: React.FC<ContactSectionProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (honeypot) return; 
-    if (!consents.legal) { setError("Aceite os termos para continuar."); return; }
+    if (!consents.legal) { setError("Acepte los términos para continuar."); return; }
     setIsSending(true);
     setError(null);
     try {
       await LeadService.createLead(tenantId, { ...formData, tipo: 'contacto', gdpr_consent: consents.legal, property_id: 'site_general' });
       setSent(true);
-    } catch (err) { setError("Erro ao enviar mensagem."); } finally { setIsSending(false); }
+    } catch (err) { setError("Error al enviar el mensaje."); } finally { setIsSending(false); }
   };
 
   const getSecondaryWithOverlay = (hex: string) => {
@@ -63,9 +64,9 @@ const ContactSection: React.FC<ContactSectionProps> = ({
         <div className="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-3xl flex items-center justify-center mx-auto mb-6">
           <CheckCircle2 size={40} />
         </div>
-        <h2 className="text-3xl font-black mb-4 tracking-tighter text-[#1c2d51] uppercase">Enviado com Sucesso</h2>
-        <p className="text-slate-500 font-medium mb-8">Responderemos ao seu pedido o mais breve possível.</p>
-        <button onClick={() => setSent(false)} className="text-[var(--primary)] font-black uppercase text-[10px] tracking-widest border-b-2 border-current pb-1">Enviar Nova Mensagem</button>
+        <h2 className="text-3xl font-black mb-4 tracking-tighter text-[#1c2d51] uppercase">¡Enviado con éxito!</h2>
+        <p className="text-slate-500 font-medium mb-8">Responderemos a su solicitud lo antes posible.</p>
+        <button onClick={() => setSent(false)} className="text-[var(--primary)] font-black uppercase text-[10px] tracking-widest border-b-2 border-current pb-1">Enviar nuevo mensaje</button>
       </section>
     );
   }
@@ -81,13 +82,13 @@ const ContactSection: React.FC<ContactSectionProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
              <div className={`p-8 rounded-[2rem] border shadow-sm ${isWhiteLabel ? 'bg-white border-slate-100' : 'bg-white/5 border-white/10'}`}>
                 <ShieldCheck size={24} className="text-blue-500 mb-4" />
-                <p className={`text-xs font-black uppercase mb-1 ${isWhiteLabel ? 'text-[#1c2d51]' : 'text-white'}`}>Dados Seguros</p>
-                <p className={`text-[10px] font-bold uppercase ${isWhiteLabel ? 'text-slate-400' : 'text-white/50'}`}>Tratamento conforme o RGPD.</p>
+                <p className={`text-xs font-black uppercase mb-1 ${isWhiteLabel ? 'text-[#1c2d51]' : 'text-white'}`}>Datos Seguros</p>
+                <p className={`text-[10px] font-bold uppercase ${isWhiteLabel ? 'text-slate-400' : 'text-white/50'}`}>Tratamiento conforme al RGPD.</p>
              </div>
              <div className={`p-8 rounded-[2rem] border shadow-sm ${isWhiteLabel ? 'bg-white border-slate-100' : 'bg-white/5 border-white/10'}`}>
                 <MessageSquare size={24} className="text-blue-500 mb-4" />
-                <p className={`text-xs font-black uppercase mb-1 ${isWhiteLabel ? 'text-[#1c2d51]' : 'text-white'}`}>Resposta Rápida</p>
-                <p className={`text-[10px] font-bold uppercase ${isWhiteLabel ? 'text-slate-400' : 'text-white/50'}`}>Acompanhamento em 24h.</p>
+                <p className={`text-xs font-black uppercase mb-1 ${isWhiteLabel ? 'text-[#1c2d51]' : 'text-white'}`}>Respuesta Rápida</p>
+                <p className={`text-[10px] font-bold uppercase ${isWhiteLabel ? 'text-slate-400' : 'text-white/50'}`}>Seguimiento en 24h.</p>
              </div>
           </div>
         </div>
@@ -96,17 +97,17 @@ const ContactSection: React.FC<ContactSectionProps> = ({
           <form onSubmit={handleSubmit} className="space-y-6">
             <input type="text" className="hidden" tabIndex={-1} autoComplete="off" value={honeypot} onChange={e => setHoneypot(e.target.value)} />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <input required className="contact-input-v4" placeholder="O seu nome" value={formData.nome} onChange={e => setFormData({...formData, nome: e.target.value})} />
-              <input required type="email" className="contact-input-v4" placeholder="O seu email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
+              <input required className="contact-input-v4" placeholder="Su nombre" value={formData.nome} onChange={e => setFormData({...formData, nome: e.target.value})} />
+              <input required type="email" className="contact-input-v4" placeholder="Su email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
             </div>
-            <input className="contact-input-v4" placeholder="Telemóvel" value={formData.telefone} onChange={e => setFormData({...formData, telefone: e.target.value})} />
-            <textarea required rows={4} className="contact-input-v4 resize-none" placeholder="A sua mensagem..." value={formData.mensagem} onChange={e => setFormData({...formData, mensagem: e.target.value})}></textarea>
+            <input className="contact-input-v4" placeholder="Móvil" value={formData.telefone} onChange={e => setFormData({...formData, telefone: e.target.value})} />
+            <textarea required rows={4} className="contact-input-v4 resize-none" placeholder="Su mensaje..." value={formData.mensagem} onChange={e => setFormData({...formData, mensagem: e.target.value})}></textarea>
             <label className="flex items-start gap-3 cursor-pointer">
               <input type="checkbox" required checked={consents.legal} onChange={e => setConsents({...consents, legal: e.target.checked})} className="mt-1 w-4 h-4 rounded border-white/30 bg-white/10 text-white" />
-              <span className="text-[10px] font-bold text-white/70">Aceito a <Link to="/privacidade" className="text-white underline">Política de Privacidade</Link>.</span>
+              <span className="text-[10px] font-bold text-white/70">Acepto la <Link to="/privacidade" className="text-white underline">Política de Privacidad</Link>.</span>
             </label>
             <button type="submit" disabled={isSending} className="w-full bg-white text-[#1c2d51] py-6 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl flex items-center justify-center gap-3 hover:-translate-y-1 transition-all">
-              {isSending ? <Loader2 className="animate-spin" /> : <Send size={18}/>} Enviar Pedido
+              {isSending ? <Loader2 className="animate-spin" /> : <Send size={18}/>} Enviar solicitud
             </button>
           </form>
         </div>
