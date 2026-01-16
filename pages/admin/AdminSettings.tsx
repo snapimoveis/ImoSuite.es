@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { useTenant } from '../../contexts/TenantContext';
@@ -87,7 +86,7 @@ const AdminSettings: React.FC = () => {
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) { 
       console.error(err);
-      alert("Error al guardar definiciones.");
+      alert("Error al guardar configuraciones.");
     } finally { setIsSaving(false); }
   };
 
@@ -116,7 +115,7 @@ const AdminSettings: React.FC = () => {
            const updated = { ...localTenant, domain_status: 'active' as const, domain_checked_at: serverTimestamp() };
            await setDoc(doc(db, 'tenants', localTenant.id), updated, { merge: true });
            setTenant(updated);
-           alert("¡Dominio activado! Puede tardar unos minutos hasta que el SSL sea propagado.");
+           alert("¡Dominio activado! Puede tardar unos minutos hasta que el SSL se propague.");
         }
       }
     } catch (err) {
@@ -138,7 +137,7 @@ const AdminSettings: React.FC = () => {
     <div className="max-w-6xl mx-auto animate-in fade-in pb-20 font-brand">
       <div className="flex flex-col md:flex-row items-center justify-between mb-10 gap-4">
         <div>
-          <h1 className="text-3xl font-black text-[#1c2d51] tracking-tighter uppercase">Configuraciones</h1>
+          <h1 className="text-3xl font-black text-[#1c2d51] tracking-tighter uppercase">Configuración</h1>
           <p className="text-slate-400 font-bold uppercase text-[9px] tracking-[0.2em] mt-1">Identidad y Gestión de la Agencia</p>
         </div>
         <button onClick={handleSave} disabled={isSaving} className="w-full md:w-auto bg-[#1c2d51] text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl hover:scale-105 transition-all">
@@ -199,8 +198,8 @@ const AdminSettings: React.FC = () => {
               <div className="flex items-center gap-4 border-b border-slate-50 pb-6">
                  <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center"><Brush size={24}/></div>
                  <div>
-                    <h3 className="text-lg font-black text-[#1c2d51] uppercase tracking-tight">Branding & Colores</h3>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase">Personalice el visual de su portal</p>
+                    <h3 className="text-lg font-black text-[#1c2d51] uppercase tracking-tight">Imagen de Marca & Colores</h3>
+                    <p className="text-[10px] text-slate-400 font-bold uppercase">Personalice el aspecto visual de su portal</p>
                  </div>
               </div>
 
@@ -225,7 +224,7 @@ const AdminSettings: React.FC = () => {
                 <div className="space-y-4">
                   <label className="admin-label-sober">Logotipo</label>
                   <div onClick={() => logoInputRef.current?.click()} className="aspect-video bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-100 p-8 overflow-hidden group transition-all">
-                    {localTenant.logo_url ? <img src={localTenant.logo_url} className="h-full object-contain" alt="Logo" /> : <Camera className="text-slate-300" size={32} />}
+                    {localTenant.logo_url ? <img src={localTenant.logo_url} className="h-full object-contain" alt="Logotipo" /> : <Camera className="text-slate-300" size={32} />}
                     <input type="file" ref={logoInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
                   </div>
                 </div>
@@ -239,7 +238,7 @@ const AdminSettings: React.FC = () => {
                  <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center"><Globe size={24}/></div>
                  <div>
                     <h3 className="text-lg font-black text-[#1c2d51] uppercase tracking-tight">Sitio Web & Dominio</h3>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase">Gestión de la presencia online</p>
+                    <p className="text-[10px] text-slate-400 font-bold uppercase">Gestión de su presencia online</p>
                  </div>
               </div>
 
@@ -259,7 +258,7 @@ const AdminSettings: React.FC = () => {
                              <h4 className="font-black text-[#1c2d51] uppercase text-xs tracking-widest flex items-center gap-2">
                                Dominio Propio <Zap size={14} className="text-amber-500 fill-current"/>
                              </h4>
-                             <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1">Conecte su propia marca (ex: www.suinmobiliaria.es)</p>
+                             <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1">Conecte su propia marca (ej: www.suinmobiliaria.es)</p>
                           </div>
                           
                           {localTenant.domain_status && (
@@ -277,7 +276,7 @@ const AdminSettings: React.FC = () => {
                        <div className="flex flex-col md:flex-row gap-4">
                           <input 
                              className="flex-1 admin-input-sober" 
-                             placeholder="ex: www.su-agencia.es" 
+                             placeholder="ej: www.su-agencia.es" 
                              value={localTenant.custom_domain || ''} 
                              onChange={e => setLocalTenant({...localTenant, custom_domain: e.target.value.toLowerCase().trim()})} 
                           />
@@ -363,7 +362,7 @@ const AdminSettings: React.FC = () => {
                         className="admin-input-sober" 
                         value={localTenant.seo_settings?.meta_title || ''} 
                         onChange={e => setLocalTenant({...localTenant, seo_settings: {...(localTenant.seo_settings || {}), meta_title: e.target.value}})} 
-                        placeholder="Ex: La Mejor Inmobiliaria en Madrid | Nombre de la Agencia"
+                        placeholder="Ej: La Mejor Inmobiliaria en Madrid | Nombre de la Agencia"
                       />
                    </div>
                    <div className="space-y-2">
@@ -413,7 +412,7 @@ const AdminSettings: React.FC = () => {
                  <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center"><CreditCard size={24}/></div>
                  <div>
                     <h3 className="text-lg font-black text-[#1c2d51] uppercase tracking-tight">Suscripción ImoSuite</h3>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase">Gestión de la suscripción y pagos</p>
+                    <p className="text-[10px] text-slate-400 font-bold uppercase">Gestión de suscripciones y pagos</p>
                  </div>
               </div>
 

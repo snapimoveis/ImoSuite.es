@@ -11,7 +11,7 @@ const PrivacyPolicySaaS: React.FC = () => {
     <div className="bg-white min-h-screen pt-32 pb-20 font-brand selection:bg-[#1c2d51] selection:text-white">
       <div className="max-w-4xl mx-auto px-6">
         <Link to="/privacidade" className="inline-flex items-center gap-2 text-slate-400 text-xs font-black uppercase tracking-widest hover:text-[#1c2d51] transition-all mb-12">
-          <ArrowLeft size={16} /> Voltar à Política Geral
+          <ArrowLeft size={16} /> Volver a la Política General
         </Link>
 
         <div className="flex items-center gap-4 mb-8">
@@ -19,67 +19,67 @@ const PrivacyPolicySaaS: React.FC = () => {
             <Globe size={24} />
           </div>
           <h1 className="text-4xl md:text-5xl font-black text-[#1c2d51] tracking-tighter uppercase leading-tight">
-            POLÍTICA DE PRIVACIDADE <br/>
-            <span className="text-[#357fb2]">Imosuite – Plataforma SaaS White-Label</span>
+            POLÍTICA DE PRIVACIDAD <br/>
+            <span className="text-[#357fb2]">ImoSuite – Plataforma SaaS White-Label</span>
           </h1>
         </div>
 
         <p className="text-slate-400 font-bold uppercase text-[10px] tracking-[0.3em] mb-12 border-b border-slate-100 pb-8">
-          Última Atualização: {new Date().toLocaleDateString('pt-PT')} • Imosuite
+          Última Actualización: {new Date().toLocaleDateString('es-ES')} • ImoSuite
         </p>
 
         <div className="prose prose-slate max-w-none space-y-12">
           
           <section className="space-y-4">
             <h2 className="text-xl font-black text-[#1c2d51] uppercase tracking-tight flex items-center gap-3 m-0">
-              <span className="text-[#357fb2]">01.</span> Identificação do Prestador da Plataforma
+              <span className="text-[#357fb2]">01.</span> Identificación del Proveedor de la Plataforma
             </h2>
             <div className="bg-slate-50 p-8 rounded-[2rem] border border-slate-100 text-slate-600 leading-relaxed font-medium">
-              <p className="m-0">A plataforma Imosuite é um software SaaS white-label, desenvolvido e operado por:</p>
+              <p className="m-0">La plataforma ImoSuite es un software SaaS white-label, desarrollado y operado por:</p>
               <ul className="mt-6 space-y-2 list-none p-0 text-slate-900">
                 <li className="flex items-center gap-3"><Building2 size={16} className="text-slate-400"/> <strong>Empresa:</strong> Moderno e Peculiar Unip. Lda</li>
                 <li className="flex items-center gap-3"><Scale size={16} className="text-slate-400"/> <strong>NIF:</strong> 515017170</li>
-                <li className="flex items-center gap-3"><Mail size={16} className="text-slate-400"/> <strong>Email de contacto:</strong> <a href="mailto:dados@imosuite.pt" className="text-[#357fb2] no-underline">dados@imosuite.pt</a></li>
-                <li className="flex items-center gap-3"><Phone size={16} className="text-slate-400"/> <strong>Telefone:</strong> +351 918 152 116</li>
+                <li className="flex items-center gap-3"><Mail size={16} className="text-slate-400"/> <strong>Email de contacto:</strong> <a href="mailto:datos@imosuite.es" className="text-[#357fb2] no-underline">datos@imosuite.es</a></li>
+                <li className="flex items-center gap-3"><Phone size={16} className="text-slate-400"/> <strong>Teléfono:</strong> +34 918 152 116</li>
               </ul>
               <p className="mt-6 text-sm font-bold text-[#1c2d51] border-t border-slate-200 pt-4">
-                A Imosuite atua, nos termos do RGPD, maioritariamente como Subcontratante (Data Processor), processando dados pessoais por conta dos seus clientes.
+                ImoSuite actúa, según los términos del RGPD, mayoritariamente como Encargado del Tratamiento (Data Processor), procesando datos personales por cuenta de sus clientes.
               </p>
             </div>
           </section>
 
           <section className="space-y-4">
             <h2 className="text-xl font-black text-[#1c2d51] uppercase tracking-tight flex items-center gap-3 m-0">
-              <span className="text-[#357fb2]">02.</span> Modelo White-Label e Responsabilidades
+              <span className="text-[#357fb2]">02.</span> Modelo White-Label y Responsabilidades
             </h2>
             <p className="text-slate-600 leading-relaxed font-medium m-0">
-              A Imosuite disponibiliza a sua plataforma em modelo white-label, permitindo que os seus clientes utilizem o software sob a sua própria marca.
+              ImoSuite pone a disposición su plataforma en modelo white-label, permitiendo que sus clientes utilicen el software bajo su propia marca.
             </p>
             <div className="bg-blue-50/50 p-8 rounded-[2rem] border border-blue-100/50 space-y-4">
-              <p className="font-bold text-[#1c2d51] m-0">Nestes casos:</p>
+              <p className="font-bold text-[#1c2d51] m-0">En estos casos:</p>
               <ul className="space-y-3 list-none p-0 text-slate-600">
-                <li className="flex gap-3"><CheckCircle2 size={16} className="text-[#357fb2] shrink-0 mt-1"/> O cliente é o Responsável pelo Tratamento (Data Controller) dos dados inseridos na plataforma.</li>
-                <li className="flex gap-3"><CheckCircle2 size={16} className="text-[#357fb2] shrink-0 mt-1"/> A Imosuite atua como Subcontratante, tratando os dados apenas de acordo com as instruções do cliente.</li>
+                <li className="flex gap-3"><CheckCircle2 size={16} className="text-[#357fb2] shrink-0 mt-1"/> El cliente es el Responsable del Tratamiento (Data Controller) de los datos introducidos en la plataforma.</li>
+                <li className="flex gap-3"><CheckCircle2 size={16} className="text-[#357fb2] shrink-0 mt-1"/> ImoSuite actúa como Encargado del Tratamiento, tratando los datos únicamente de acuerdo con las instrucciones del cliente.</li>
               </ul>
               <p className="text-xs font-bold text-slate-500 m-0 pt-2">
-                Cada cliente é responsável por: Garantir base legal para recolha e tratamento de dados; Informar os titulares dos dados; Disponibilizar a sua própria Política de Privacidade, quando aplicável.
+                Cada cliente es responsable de: Garantizar la base legal para la recogida y tratamiento de datos; informar a los interesados; y disponer de su propia Política de Privacidad, cuando sea aplicable.
               </p>
             </div>
           </section>
 
           <section className="space-y-4">
             <h2 className="text-xl font-black text-[#1c2d51] uppercase tracking-tight flex items-center gap-3 m-0">
-              <span className="text-[#357fb2]">03.</span> Dados Pessoais Tratados
+              <span className="text-[#357fb2]">03.</span> Datos Personales Tratados
             </h2>
-            <p className="text-slate-600 leading-relaxed font-medium m-0">A Imosuite pode tratar, em nome dos seus clientes, os seguintes dados:</p>
+            <p className="text-slate-600 leading-relaxed font-medium m-0">ImoSuite puede tratar, en nombre de sus clientes, los siguientes datos:</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
               {[
-                "Dados de identificação (nome, email, telefone)",
-                "Dados de clientes finais inseridos pelos utilizadores",
-                "Dados de imóveis, contratos, leads e interações",
-                "Dados de autenticação e acesso",
-                "Dados técnicos (IP, logs, data/hora de acesso)",
-                "Dados de faturação e subscrição"
+                "Datos de identificación (nombre, email, teléfono)",
+                "Datos de clientes finales introducidos por los usuarios",
+                "Datos de inmuebles, contratos, leads e interacciones",
+                "Datos de autenticación y acceso",
+                "Datos técnicos (IP, logs, fecha/hora de acceso)",
+                "Datos de facturación y suscripción"
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-3 p-4 bg-slate-50 border border-slate-100 rounded-2xl">
                   <CheckCircle2 size={16} className="text-emerald-500" />
@@ -91,18 +91,18 @@ const PrivacyPolicySaaS: React.FC = () => {
 
           <section className="space-y-4">
             <h2 className="text-xl font-black text-[#1c2d51] uppercase tracking-tight flex items-center gap-3 m-0">
-              <span className="text-[#357fb2]">04.</span> Finalidades do Tratamento
+              <span className="text-[#357fb2]">04.</span> Finalidades del Tratamiento
             </h2>
             <div className="bg-[#1c2d51] p-10 rounded-[3rem] text-white shadow-xl relative overflow-hidden">
               <Target className="absolute -right-10 -bottom-10 text-white/5 w-64 h-64 rotate-12" />
-              <p className="text-sm font-bold mb-6 opacity-80">Os dados são tratados exclusivamente para:</p>
+              <p className="text-sm font-bold mb-6 opacity-80">Los datos son tratados exclusivamente para:</p>
               <ul className="space-y-4 list-none p-0 relative z-10">
                 {[
-                  "Disponibilização e funcionamento da plataforma SaaS",
-                  "Gestão de contas e utilizadores",
-                  "Prestação de serviços contratados",
-                  "Suporte técnico e segurança",
-                  "Cumprimento de obrigações legais"
+                  "Prestación y funcionamiento de la plataforma SaaS",
+                  "Gestión de cuentas y usuarios",
+                  "Prestación de los servicios contratados",
+                  "Soporte técnico y seguridad",
+                  "Cumplimiento de obligaciones legales"
                 ].map((text, i) => (
                   <li key={i} className="flex items-start gap-4 text-sm font-medium opacity-90">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#357fb2] mt-2 shrink-0"></div>
@@ -110,37 +110,37 @@ const PrivacyPolicySaaS: React.FC = () => {
                   </li>
                 ))}
               </ul>
-              <p className="mt-8 text-xs font-black uppercase tracking-widest text-[#357fb2] relative z-10">A Imosuite não utiliza os dados para fins próprios de marketing dos clientes finais.</p>
+              <p className="mt-8 text-xs font-black uppercase tracking-widest text-[#357fb2] relative z-10">ImoSuite no utiliza los datos para fines propios de marketing de los clientes finales.</p>
             </div>
           </section>
 
           <section className="space-y-4">
             <h2 className="text-xl font-black text-[#1c2d51] uppercase tracking-tight flex items-center gap-3 m-0">
-              <span className="text-[#357fb2]">05.</span> Fundamento Legal
+              <span className="text-[#357fb2]">05.</span> Base Legal
             </h2>
-            <p className="text-slate-600 leading-relaxed font-medium m-0">O tratamento de dados assenta em:</p>
+            <p className="text-slate-600 leading-relaxed font-medium m-0">El tratamiento de datos se basa en:</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
-               <LegalCard title="Execução de Contrato" desc="Com os clientes da plataforma." />
-               <LegalCard title="Obrigações Legais" desc="Cumprimento de normas vigentes." />
-               <LegalCard title="Interesse Legítimo" desc="Segurança e prevenção de fraude." />
-               <LegalCard title="Consentimento" desc="Quando aplicável (sob responsabilidade do cliente)." />
+               <LegalCard title="Ejecución de Contrato" desc="Con los clientes de la plataforma." />
+               <LegalCard title="Obligaciones Legales" desc="Cumplimiento de las normativas vigentes." />
+               <LegalCard title="Interés Legítimo" desc="Seguridad y prevención del fraude." />
+               <LegalCard title="Consentimiento" desc="Cuando sea aplicable (bajo responsabilidad del cliente)." />
             </div>
           </section>
 
           <section className="space-y-4">
             <h2 className="text-xl font-black text-[#1c2d51] uppercase tracking-tight flex items-center gap-3 m-0">
-              <span className="text-[#357fb2]">06.</span> Conservação dos Dados
+              <span className="text-[#357fb2]">06.</span> Conservación de los Datos
             </h2>
             <div className="bg-slate-50 p-8 rounded-[2rem] border border-slate-100 space-y-4 text-slate-600 font-medium text-sm">
-              <p className="m-0 font-bold text-[#1c2d51]">Os dados são conservados:</p>
+              <p className="m-0 font-bold text-[#1c2d51]">Los datos se conservan:</p>
               <ul className="list-disc ml-6 space-y-2">
-                <li>Durante a vigência do contrato.</li>
-                <li>Pelo período necessário para obrigações legais.</li>
-                <li>Até pedido de eliminação pelo cliente, salvo obrigação legal em contrário.</li>
+                <li>Durante la vigencia del contrato.</li>
+                <li>Por el periodo necesario para obligaciones legales.</li>
+                <li>Hasta la solicitud de eliminación por parte del cliente, salvo obligación legal en contrario.</li>
               </ul>
-              <p className="mt-4 m-0 font-bold text-[#1c2d51]">Após cessação do contrato, os dados podem ser:</p>
+              <p className="mt-4 m-0 font-bold text-[#1c2d51]">Tras la finalización del contrato, los datos pueden ser:</p>
               <ul className="list-disc ml-6 space-y-2">
-                <li>Exportados pelo cliente.</li>
+                <li>Exportados por el cliente.</li>
                 <li>Eliminados de forma segura.</li>
               </ul>
             </div>
@@ -148,38 +148,38 @@ const PrivacyPolicySaaS: React.FC = () => {
 
           <section className="space-y-4">
             <h2 className="text-xl font-black text-[#1c2d51] uppercase tracking-tight flex items-center gap-3 m-0">
-              <span className="text-[#357fb2]">07.</span> Subcontratantes e Infraestrutura
+              <span className="text-[#357fb2]">07.</span> Encargados del Tratamiento e Infraestructura
             </h2>
             <p className="text-slate-600 leading-relaxed font-medium m-0">
-              A Imosuite pode recorrer a subcontratantes tecnológicos, nomeadamente: Serviços cloud; Serviços de email transacional; Serviços de pagamento; Ferramentas de monitorização e segurança. Todos cumprem o RGPD e garantem níveis adequados de proteção.
+              ImoSuite puede recurrir a proveedores tecnológicos, concretamente: servicios cloud, servicios de email transaccional, pasarelas de pago y herramientas de monitorización y seguridad. Todos cumplen con el RGPD y garantizan niveles adecuados de protección.
             </p>
           </section>
 
           <section className="space-y-4">
             <h2 className="text-xl font-black text-[#1c2d51] uppercase tracking-tight flex items-center gap-3 m-0">
-              <span className="text-[#357fb2]">08.</span> Transferências Internacionais
+              <span className="text-[#357fb2]">08.</span> Transferencias Internacionales
             </h2>
             <p className="text-slate-600 leading-relaxed font-medium bg-slate-50 p-6 rounded-2xl border border-slate-100 flex items-start gap-4">
               <Globe className="text-[#357fb2] shrink-0" size={20} />
-              Caso existam transferências de dados para fora da União Europeia, estas serão realizadas apenas com garantias adequadas, como Cláusulas Contratuais-Tipo da Comissão Europeia ou Decisões de adequação.
+              En caso de existir transferencias de datos fuera de la Unión Europea, estas se realizarán únicamente con las garantías adecuadas, como las Cláusulas Contractuales Tipo de la Comisión Europea o Decisiones de adecuación.
             </p>
           </section>
 
           <section className="space-y-4">
             <h2 className="text-xl font-black text-[#1c2d51] uppercase tracking-tight flex items-center gap-3 m-0">
-              <span className="text-[#357fb2]">09.</span> Direitos dos Titulares dos Dados
+              <span className="text-[#357fb2]">09.</span> Derechos de los Interesados
             </h2>
             <p className="text-slate-600 leading-relaxed font-medium m-0">
-              Os titulares dos dados podem exercer os seus direitos junto do Responsável pelo Tratamento (cliente). Sempre que necessário, a Imosuite prestará apoio técnico para: Acesso; Retificação; Apagamento; Portabilidade; Limitação ou oposição. Pedidos podem também ser encaminhados para <a href="mailto:dados@imosuite.pt" className="text-[#357fb2]">dados@imosuite.pt</a>.
+              Los interesados pueden ejercer sus derechos ante el Responsable del Tratamiento (cliente). Siempre que sea necesario, ImoSuite prestará apoyo técnico para: acceso, rectificación, supresión, portabilidad, limitación u oposición. Las solicitudes también pueden enviarse a <a href="mailto:datos@imosuite.es" className="text-[#357fb2]">datos@imosuite.es</a>.
             </p>
           </section>
 
           <section className="space-y-4">
             <h2 className="text-xl font-black text-[#1c2d51] uppercase tracking-tight flex items-center gap-3 m-0">
-              <span className="text-[#357fb2]">10.</span> Segurança da Informação
+              <span className="text-[#357fb2]">10.</span> Seguridad de la Información
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-6">
-               {["Controlo de acessos", "Encriptação", "Isolamento de dados", "Logs e monitorização", "Backups regulares"].map((dir, i) => (
+               {["Control de accesos", "Cifrado", "Aislamiento de datos", "Logs y monitorización", "Backups regulares"].map((dir, i) => (
                  <div key={i} className="p-4 bg-slate-50 rounded-xl text-center border border-slate-100 flex items-center justify-center">
                     <span className="text-[10px] font-black uppercase text-slate-600 tracking-tight leading-tight">{dir}</span>
                  </div>
@@ -189,11 +189,11 @@ const PrivacyPolicySaaS: React.FC = () => {
 
           <section className="space-y-4">
             <h2 className="text-xl font-black text-[#1c2d51] uppercase tracking-tight flex items-center gap-3 m-0">
-              <span className="text-[#357fb2]">11.</span> Alterações
+              <span className="text-[#357fb2]">11.</span> Cambios
             </h2>
             <p className="text-slate-600 leading-relaxed font-medium flex items-start gap-4">
               <RefreshCw size={20} className="text-slate-300 shrink-0 mt-1" />
-              Esta Política pode ser atualizada a qualquer momento. Recomenda-se a consulta periódica.
+              Esta Política puede ser actualizada en cualquier momento. Se recomienda su consulta periódica.
             </p>
           </section>
 
@@ -207,8 +207,8 @@ const PrivacyPolicySaaS: React.FC = () => {
                   <Mail size={18} />
                 </div>
                 <div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase">Suporte de Dados</p>
-                  <p className="font-bold text-[#1c2d51]">dados@imosuite.pt</p>
+                  <p className="text-[10px] font-black text-slate-400 uppercase">Soporte de Datos</p>
+                  <p className="font-bold text-[#1c2d51]">datos@imosuite.es</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 p-6 bg-slate-50 rounded-[1.5rem] border border-slate-100">
@@ -216,8 +216,8 @@ const PrivacyPolicySaaS: React.FC = () => {
                   <Phone size={18} />
                 </div>
                 <div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase">Linha Directa</p>
-                  <p className="font-bold text-[#1c2d51]">+351 918 152 116</p>
+                  <p className="text-[10px] font-black text-slate-400 uppercase">Línea Directa</p>
+                  <p className="font-bold text-[#1c2d51]">+34 918 152 116</p>
                 </div>
               </div>
             </div>
@@ -226,7 +226,7 @@ const PrivacyPolicySaaS: React.FC = () => {
           <section className="pt-12 text-center">
             <ShieldCheck className="mx-auto text-slate-200 mb-6" size={48}/>
             <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.3em] leading-relaxed max-w-lg mx-auto m-0">
-              Imosuite • Software desenvolvido pela Moderno e Peculiar Unip. Lda
+              ImoSuite • Software desarrollado por Moderno e Peculiar Unip. Lda
             </p>
           </section>
         </div>
