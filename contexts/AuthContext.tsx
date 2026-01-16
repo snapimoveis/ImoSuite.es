@@ -1,8 +1,7 @@
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
-// Fix: Using standard modular exports
-import { doc, onSnapshot } from 'firebase/firestore';
+import { doc, onSnapshot, getDoc } from 'firebase/firestore';
 import { auth, db } from '../lib/firebase';
 
 interface UserProfile {
@@ -20,6 +19,7 @@ interface AuthContextType {
   profile: UserProfile | null;
   loading: boolean;
   logout: () => Promise<void>;
+  isSessionReady: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -28,42 +28,40 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isSessionReady, setIsSessionReady] = useState(false);
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       
       if (currentUser) {
+        // Cargar perfil desde Firestore (Fuente única de verdad para el tenantId)
         const profileRef = doc(db, 'users', currentUser.uid);
         
-        // Adicionado callback de erro para lidar com permissões insuficientes durante o registo
         const unsubscribeProfile = onSnapshot(profileRef, (docSnap) => {
           if (docSnap.exists()) {
             setProfile(docSnap.data() as UserProfile);
           } else {
-            // Perfil básico temporário enquanto o documento é criado no Register.tsx
-            setProfile({
-              id: currentUser.uid,
-              email: currentUser.email || '',
-              displayName: currentUser.displayName || 'Utilizador',
-              role: 'admin',
-              tenantId: 'pending'
-            });
+            // Caso de error: Usuario en Auth pero sin documento en Firestore
+            console.error("No se encontró el perfil del usuario en Firestore.");
+            setProfile(null);
           }
+          setIsSessionReady(true);
           setLoading(false);
         }, (error) => {
-          // Erro de permissão é esperado durante os primeiros segundos do registo
-          if (error.code !== 'permission-denied') {
-             console.error("Erro ao escutar perfil:", error);
+          console.error("Error al escuchar perfil:", error);
+          if (error.code === 'permission-denied') {
+            alert("No tienes permisos para acceder a estos datos.");
           }
-          // Se não temos perfil, mantemos o estado carregando ou pendente
           setLoading(false);
+          setIsSessionReady(true);
         });
 
         return () => unsubscribeProfile();
       } else {
         setProfile(null);
         setLoading(false);
+        setIsSessionReady(true);
       }
     });
 
@@ -72,10 +70,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const logout = async () => {
     await signOut(auth);
+    setProfile(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, profile, loading, logout }}>
+    <AuthContext.Provider value={{ user, profile, loading, logout, isSessionReady }}>
       {children}
     </AuthContext.Provider>
   );
@@ -84,7 +83,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth deve ser usado dentro de um AuthProvider');
+    throw new Error('useAuth debe ser usado dentro de un AuthProvider');
   }
   return context;
 };

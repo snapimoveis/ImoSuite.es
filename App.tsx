@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { HashRouter as Router, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 
@@ -11,10 +12,7 @@ import PricingPage from './pages/Pricing';
 import Register from './pages/onboarding/Register';
 import Login from './pages/Login';
 import PrivacyPolicy from './pages/PrivacyPolicy';
-import PrivacyPolicySaaS from './pages/PrivacyPolicySaaS';
-import DPA from './pages/DPA';
 import TermsOfUse from './pages/TermsOfUse';
-import TermsOfUseSaaS from './pages/TermsOfUseSaaS';
 import RAL from './pages/RAL';
 import OnboardingFlow from './pages/onboarding/OnboardingFlow';
 import Dashboard from './pages/admin/Dashboard';
@@ -31,8 +29,19 @@ import PublicPage from './pages/PublicPage';
 import PublicImoveis from './pages/PublicImoveis';
 
 const ProtectedRoute = ({ children }: { children?: React.ReactNode }) => {
-  const { user, loading } = useAuth();
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-slate-50"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1c2d51]"></div></div>;
+  const { user, loading, isSessionReady } = useAuth();
+  
+  if (loading || !isSessionReady) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1c2d51]"></div>
+          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Verificando Credenciales...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!user) return <Navigate to="/login" replace />;
   return <>{children}</>;
 };
@@ -61,10 +70,7 @@ const App: React.FC = () => {
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route path="/privacidade" element={<PrivacyPolicy />} />
-              <Route path="/privacidade-saas" element={<PrivacyPolicySaaS />} />
-              <Route path="/dpa" element={<DPA />} />
               <Route path="/termos" element={<TermsOfUse />} />
-              <Route path="/termos-saas" element={<TermsOfUseSaaS />} />
               <Route path="/resolucao-de-litigios" element={<RAL />} />
             </Route>
 

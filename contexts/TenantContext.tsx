@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 // Correct modular imports for Firestore
 import { doc, onSnapshot, collection, query, where, getDocs, limit } from 'firebase/firestore';
@@ -25,17 +24,17 @@ export const TenantProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     const resolveTenantByHost = async () => {
       const hostname = window.location.hostname;
       
-      // Lista expandida de domínios que NÃO devem disparar consulta de Tenant (SaaS Principal ou Dev)
+      // Lista expandida de domínios que NÃO devem disparar consulta de Tenant (SaaS Principal ES ou Dev)
       const isMainDomain = 
-        hostname === 'imosuite.pt' || 
-        hostname === 'www.imosuite.pt' ||
+        hostname === 'imosuite.es' || 
+        hostname === 'www.imosuite.es' ||
         hostname === 'localhost' || 
         hostname === '127.0.0.1' ||
         hostname.includes('vercel.app') || 
         hostname.includes('firebaseapp.com') || 
         hostname.includes('web.app');
 
-      const isSystemSubdomain = hostname.endsWith('.imosuite.pt');
+      const isSystemSubdomain = hostname.endsWith('.imosuite.es');
 
       if (!isMainDomain) {
         try {
