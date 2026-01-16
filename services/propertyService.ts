@@ -37,7 +37,7 @@ export const PropertyService = {
         } as Imovel;
       });
     } catch (error) {
-      console.error("Erro ao listar imóveis:", error);
+      console.error("Error al listar inmuebles:", error);
       return [];
     }
   },
@@ -53,11 +53,11 @@ export const PropertyService = {
   },
 
   async createProperty(tenantId: string, propertyData: Partial<Imovel>, mediaItems: ImovelMedia[] = []) {
-    if (!tenantId || tenantId === 'pending') throw new Error("Sessão expirada ou agência inválida.");
+    if (!tenantId || tenantId === 'pending') throw new Error("Sesión expirada o agencia inválida.");
     
     const propertiesRef = collection(db, "tenants", tenantId, "properties");
 
-    // 1. Criar o documento primeiro para ter o ID da propriedade
+    // 1. Crear documento primero para obtener ID
     const tempPropertyData = {
       ...propertyData,
       tipologia: propertyData.tipologia || propertyData.tipology || 'T0',
@@ -72,7 +72,7 @@ export const PropertyService = {
     const docRef = await addDoc(propertiesRef, prepareData(tempPropertyData, false));
     const propertyId = docRef.id;
 
-    // 2. Processar e fazer upload das imagens
+    // 2. Procesar y subir imágenes
     const processedMedia = await Promise.all(mediaItems.map(async (item, index) => {
       if (item.url.startsWith('data:image')) {
         const fileName = `${crypto.randomUUID()}.jpg`;
@@ -85,13 +85,13 @@ export const PropertyService = {
 
     const coverImage = processedMedia.find(m => m.is_cover) || processedMedia[0];
 
-    // 3. Atualizar o documento principal com a capa correta
+    // 3. Actualizar documento principal con portada
     await updateDoc(docRef, {
       "media.cover_media_id": coverImage?.id || null,
       "media.cover_url": coverImage?.url || null
     });
 
-    // 4. Salvar subcoleção de media
+    // 4. Guardar subcolección de media
     if (processedMedia.length > 0) {
       const mediaColRef = collection(db, "tenants", tenantId, "properties", propertyId, "media");
       const batch = writeBatch(db);
@@ -116,7 +116,6 @@ export const PropertyService = {
     let finalMediaData = updates.media;
 
     if (mediaItems) {
-      // Processar uploads das imagens novas (Base64)
       const processedMedia = await Promise.all(mediaItems.map(async (item, index) => {
         if (item.url.startsWith('data:image')) {
           const fileName = `${crypto.randomUUID()}.jpg`;
@@ -135,7 +134,6 @@ export const PropertyService = {
         total: processedMedia.length
       };
 
-      // Atualizar subcoleção de media
       const mediaColRef = collection(db, "tenants", tenantId, "properties", propertyId, "media");
       const existingMedia = await getDocs(mediaColRef);
       const batch = writeBatch(db);

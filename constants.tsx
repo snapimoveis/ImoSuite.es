@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BarChart3, Building2, Globe, MessageSquare, Users, Settings } from 'lucide-react';
 import { Tenant, TenantCMS } from './types';
@@ -47,13 +48,13 @@ export const DEFAULT_TENANT_CMS: TenantCMS = {
     main: [
       { id: 'm1', label: 'Inicio', path: '/', order: 0, is_external: false },
       { id: 'm2', label: 'Propiedades', path: 'imoveis', order: 1, is_external: false },
-      { id: 'm3', label: 'Agencia', path: 'quem-somos', order: 2, is_external: false },
+      { id: 'm3', label: 'Agencia', path: 'quienes-somos', order: 2, is_external: false },
       { id: 'm4', label: 'Contactos', path: 'contactos', order: 3, is_external: false }
     ],
     footer: [
-      { id: 'f1', label: 'Política de Privacidad', path: 'privacidade', order: 0, is_external: false },
-      { id: 'f2', label: 'Términos de Servicio', path: 'termos', order: 1, is_external: false },
-      { id: 'f3', label: 'Resolución de Litigios', path: 'resolucao-de-litigios', order: 2, is_external: false },
+      { id: 'f1', label: 'Política de Privacidad', path: 'privacidad', order: 0, is_external: false },
+      { id: 'f2', label: 'Términos de Servicio', path: 'terminos', order: 1, is_external: false },
+      { id: 'f3', label: 'Resolución de Litigios', path: 'resolucion-de-litigios', order: 2, is_external: false },
       { id: 'f4', label: 'Libro de Reclamaciones', path: 'https://www.consumo.gob.es/', order: 3, is_external: true }
     ]
   },
@@ -61,7 +62,7 @@ export const DEFAULT_TENANT_CMS: TenantCMS = {
     { 
       id: 'p1', 
       title: 'Nuestra Agencia', 
-      slug: 'quem-somos', 
+      slug: 'quienes-somos', 
       content_md: 'Fundada con el propósito de simplificar el mercado inmobiliario en España, nuestra agencia destaca por su transparencia y eficacia.', 
       enabled: true
     },
@@ -69,21 +70,21 @@ export const DEFAULT_TENANT_CMS: TenantCMS = {
     {
       id: 'p3',
       title: 'Resolución Alternativa de Litigios',
-      slug: 'resolucao-de-litigios',
+      slug: 'resolucion-de-litigios',
       enabled: true,
       content_md: 'El contenido de esta página se genera automáticamente con las entidades oficiales de resolución de conflictos de consumo en España.'
     },
     {
       id: 'p4',
       title: 'Política de Privacidad',
-      slug: 'privacidade',
+      slug: 'privacidad',
       enabled: true,
       content_md: 'Sus datos son tratados con la máxima seguridad y confidencialidad, de acuerdo con el RGPD y la LOPDGDD.'
     },
     {
       id: 'p5',
       title: 'Términos de Servicio',
-      slug: 'termos',
+      slug: 'terminos',
       enabled: true,
       content_md: 'Al utilizar este sitio web, usted acepta nuestras condiciones de uso.'
     }

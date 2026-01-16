@@ -1,4 +1,3 @@
-
 // Modular Firestore imports for Firebase v9+
 import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from './firebase';
@@ -31,7 +30,7 @@ export function cn(...classes: (string | boolean | undefined)[]) {
 }
 
 /**
- * Converte uma string Base64 num Blob.
+ * Convierte una cadena Base64 en un Blob.
  */
 export function base64ToBlob(base64: string): Blob {
   const parts = base64.split(';base64,');
@@ -46,8 +45,8 @@ export function base64ToBlob(base64: string): Blob {
 }
 
 /**
- * Redimensiona e comprime uma imagem Base64.
- * CORREÇÃO: Preservação estrita de transparência para PNG.
+ * Redimensiona y comprime una imagen Base64.
+ * PRESERVACIÓN: Estricta preservación de transparencia para archivos PNG.
  */
 export const compressImage = (base64Str: string, maxWidth = 1200, maxHeight = 1200, quality = 0.7): Promise<string> => {
   return new Promise((resolve) => {
@@ -75,16 +74,12 @@ export const compressImage = (base64Str: string, maxWidth = 1200, maxHeight = 12
       const ctx = canvas.getContext('2d');
       if (!ctx) return resolve(base64Str);
 
-      // Limpar o canvas com transparência total antes de desenhar
       ctx.clearRect(0, 0, width, height);
       ctx.drawImage(img, 0, 0, width, height);
       
-      // Deteção robusta de PNG
       const isPng = base64Str.toLowerCase().includes('image/png') || base64Str.toLowerCase().includes('.png');
       
       if (isPng) {
-        // Para PNG, não usamos o parâmetro 'quality' no toDataURL do browser, 
-        // pois isso forçaria a perda de canais de alfa em alguns motores.
         resolve(canvas.toDataURL('image/png'));
       } else {
         resolve(canvas.toDataURL('image/jpeg', quality));

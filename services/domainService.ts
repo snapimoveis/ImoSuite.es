@@ -1,4 +1,3 @@
-
 export const DNS_RECORDS = {
   A_ROOT: "76.76.21.21",
   CNAME_WWW: "cname.vercel-dns.com"
@@ -6,17 +5,16 @@ export const DNS_RECORDS = {
 
 export const DomainService = {
   /**
-   * Verifica via Google DNS se os registos do domínio estão corretos.
-   * Não requer bibliotecas externas.
+   * Verifica vía Google DNS si los registros del dominio están configurados correctamente.
+   * No requiere bibliotecas externas.
    */
   async verifyDNS(domain: string): Promise<{ rootOk: boolean; wwwOk: boolean; status: 'pending' | 'invalid' | 'verified' }> {
     const cleanDomain = domain.toLowerCase().trim().replace(/^https?:\/\//, '').replace(/\/$/, '');
     
-    // 1. Verificar Registo A no domínio raiz (ex: agencia.pt)
+    // 1. Verificar Registro A en el dominio raíz (ej: agencia.es)
     const rootOk = await this.checkRecord(cleanDomain, 'A', DNS_RECORDS.A_ROOT);
     
-    // 2. Verificar Registo CNAME no subdomínio www (ex: www.agencia.pt)
-    // Se o utilizador inseriu apenas agencia.pt, verificamos www.agencia.pt
+    // 2. Verificar Registro CNAME en el subdominio www (ej: www.agencia.es)
     const wwwDomain = cleanDomain.startsWith('www.') ? cleanDomain : `www.${cleanDomain}`;
     const wwwOk = await this.checkRecord(wwwDomain, 'CNAME', DNS_RECORDS.CNAME_WWW);
 
@@ -34,21 +32,21 @@ export const DomainService = {
       
       if (!data.Answer) return false;
       
-      // Verifica se algum dos registos retornados coincide com o esperado
+      // Verifica si alguno de los registros devueltos coincide con el esperado
       return data.Answer.some((ans: any) => {
         const val = ans.data.endsWith('.') ? ans.data.slice(0, -1) : ans.data;
         return val === expected;
       });
     } catch (err) {
-      console.error(`DNS check failed for ${name}:`, err);
+      console.error(`Fallo en comprobación DNS para ${name}:`, err);
       return false;
     }
   },
 
   isValidFormat(domain: string): boolean {
     if (!domain) return false;
-    // Regex simples para formato de domínio
+    // Regex simple para formato de dominio
     const pattern = /^(?!:\/\/)([a-zA-Z0-9-_]+\.)*[a-zA-Z0-9][a-zA-Z0-9-_]+\.[a-zA-Z]{2,11}?$/;
-    return pattern.test(domain) && !domain.includes('imosuite.pt');
+    return pattern.test(domain) && !domain.includes('imosuite.es');
   }
 };

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { collection, query, where, getDocs, limit } from "firebase/firestore";
@@ -42,7 +41,6 @@ const PublicPortal: React.FC = () => {
           document.documentElement.style.setProperty('--primary', tData.cor_primaria);
           document.documentElement.style.setProperty('--secondary', tData.cor_secundaria || tData.cor_primaria);
           
-          // Injeção do Google Analytics se configurado
           if (tData.seo_settings?.google_analytics_id) {
              const script1 = document.createElement('script');
              script1.async = true;
@@ -148,7 +146,7 @@ const PublicPortal: React.FC = () => {
                <div className="space-y-6">
                   <h2 className={`text-3xl md:text-4xl ${s.heading}`}>{section.content.title}</h2>
                   <p className="text-lg text-slate-500 leading-relaxed">{section.content.text}</p>
-                  <Link to={`/agencia/${tenant.slug}/p/quem-somos`} className="text-xs font-black uppercase tracking-widest text-[var(--primary)] border-b-2 border-current pb-1">Saber más</Link>
+                  <Link to={`/agencia/${tenant.slug}/p/quienes-somos`} className="text-xs font-black uppercase tracking-widest text-[var(--primary)] border-b-2 border-current pb-1">Saber más</Link>
                </div>
             </section>
           );

@@ -4,12 +4,12 @@ import { db } from "../lib/firebase";
 import { Tenant } from "../types";
 
 /**
- * CONFIGURAÇÃO DA EXTENSÃO STRIPE
+ * CONFIGURACIÓN DE LA EXTENSIÓN STRIPE
  */
 const STRIPE_ROOT_COLLECTION = "customers"; 
 
 /**
- * IDs DE PREÇO DO STRIPE REAIS
+ * IDs DE PRECIO DE STRIPE REALES (MODO PRODUCCIÓN)
  */
 export const StripePlans = {
   starter: "price_1SobVF9YE7qSVg1quKIHx0qM",  
@@ -76,10 +76,10 @@ export const SubscriptionService = {
   },
 
   createCheckoutSession: async (userId: string, priceId: string) => {
-    if (!userId) throw new Error("Utilizador não autenticado.");
+    if (!userId) throw new Error("Usuario no autenticado.");
     
     if (!priceId || priceId.includes('placeholder') || priceId.includes('EXEMPLO')) {
-      const msg = "Erro de Configuração: O ID do plano no código ainda é um exemplo. Por favor, configure os Price IDs reais do Stripe no ficheiro subscriptionService.ts.";
+      const msg = "Error de Configuración: El ID del plan en el código es un ejemplo. Por favor, configure los Price IDs reales en el archivo subscriptionService.ts.";
       console.error(msg);
       throw new Error(msg);
     }
@@ -93,13 +93,13 @@ export const SubscriptionService = {
         cancel_url: window.location.origin + "/#/admin/settings?tab=billing&session=cancel",
         allow_promotion_codes: true,
         trial_from_plan: true,
-        metadata: { user_id: userId, source: 'imosuite_web' }
+        metadata: { user_id: userId, source: 'imosuite_es_web' }
       });
 
       return new Promise((resolve, reject) => {
         const timeout = setTimeout(() => {
           unsubscribe();
-          reject(new Error("O Stripe demorou demasiado tempo. Verifique a sua ligação ou a configuração da extensão no Firebase."));
+          reject(new Error("Stripe tardó demasiado. Verifique su conexión o la configuración de la extensión en Firebase."));
         }, 30000);
 
         const unsubscribe = onSnapshot(docRef, (snap) => {
@@ -111,8 +111,8 @@ export const SubscriptionService = {
             unsubscribe();
             console.error("[STRIPE ERROR]", data.error);
             const errorMsg = data.error.message.includes('No such price') 
-              ? "Este plano não existe na sua conta Stripe. Verifique o Price ID." 
-              : `Erro Stripe: ${data.error.message}`;
+              ? "Este plan no existe en su cuenta de Stripe. Verifique el Price ID." 
+              : `Error Stripe: ${data.error.message}`;
             reject(new Error(errorMsg));
           }
           
@@ -129,7 +129,7 @@ export const SubscriptionService = {
         });
       });
     } catch (err: any) {
-      console.error("Erro ao iniciar checkout:", err);
+      console.error("Error al iniciar el checkout:", err);
       throw err;
     }
   }

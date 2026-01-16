@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { collection, query, where, getDocs, limit } from "firebase/firestore";
@@ -95,11 +94,11 @@ const PublicImovelDetails: React.FC = () => {
     try {
       await LeadService.createLead(tenant.id, { ...formData, property_id: imovel.id, property_ref: imovel.ref, tipo: 'contacto', gdpr_consent: true });
       setSent(true);
-    } catch (err) { alert("Erro ao enviar."); } finally { setIsSending(false); }
+    } catch (err) { alert("Error al enviar."); } finally { setIsSending(false); }
   };
 
   if (loading) return <div className="h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin text-[var(--primary)]" size={48} /></div>;
-  if (!imovel || !tenant) return <div className="h-screen flex items-center justify-center font-black text-slate-300">Imóvel não encontrado</div>;
+  if (!imovel || !tenant) return <div className="h-screen flex items-center justify-center font-black text-slate-300">Inmueble no encontrado</div>;
 
   const cms = tenant.cms || DEFAULT_TENANT_CMS;
   const tid = tenant.template_id || 'heritage';
@@ -156,7 +155,7 @@ const PublicImovelDetails: React.FC = () => {
 
       <main className="flex-1 max-w-7xl mx-auto px-6 py-8 md:py-16 w-full animate-in fade-in">
         <Link to={`/agencia/${tenant.slug}`} className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 mb-8 md:mb-12 hover:opacity-70">
-          <ChevronLeft size={16}/> Voltar
+          <ChevronLeft size={16}/> Volver
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16">
@@ -204,17 +203,17 @@ const PublicImovelDetails: React.FC = () => {
                </div>
 
                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                  <SpecBox icon={<Bed size={20}/>} label="Quartos" val={imovel.divisoes.quartos || 'N/A'} tid={tid} />
-                  <SpecBox icon={<Bath size={20}/>} label="Banhos" val={imovel.divisoes.casas_banho || 'N/A'} tid={tid} />
+                  <SpecBox icon={<Bed size={20}/>} label="Habitaciones" val={imovel.divisoes.quartos || 'N/A'} tid={tid} />
+                  <SpecBox icon={<Bath size={20}/>} label="Baños" val={imovel.divisoes.casas_banho || 'N/A'} tid={tid} />
                   <SpecBox icon={<Square size={20}/>} label="Área Útil" val={imovel.areas.area_util_m2 ? `${imovel.areas.area_util_m2}m²` : '---'} tid={tid} />
                   {imovel.areas.area_terreno_m2 && (
-                    <SpecBox icon={<Maximize2 size={20}/>} label="Área Terreno" val={`${imovel.areas.area_terreno_m2}m²`} tid={tid} />
+                    <SpecBox icon={<Maximize2 size={20}/>} label="Área Parcela" val={`${imovel.areas.area_terreno_m2}m²`} tid={tid} />
                   )}
-                  <SpecBox icon={<Building2 size={20}/>} label="Tipologia" val={imovel.tipologia} tid={tid} />
+                  <SpecBox icon={<Building2 size={20}/>} label="Tipología" val={imovel.tipologia} tid={tid} />
                </div>
 
                <div className={`p-8 md:p-12 border ${tid === 'prestige' ? 'bg-neutral-900 border-white/5' : 'bg-slate-50/50 border-slate-100'} ${tid === 'luxe' ? 'rounded-[2rem] md:rounded-[4rem]' : tid === 'canvas' ? 'rounded-[1.5rem] md:rounded-[3rem]' : 'rounded-none'}`}>
-                  <h3 className="text-xl md:text-2xl font-black uppercase tracking-tighter mb-8 flex items-center gap-3"><Info size={24} className="text-blue-500" /> Descrição</h3>
+                  <h3 className="text-xl md:text-2xl font-black uppercase tracking-tighter mb-8 flex items-center gap-3"><Info size={24} className="text-blue-500" /> Descripción</h3>
                   <div className="prose prose-slate max-w-none font-medium leading-relaxed whitespace-pre-line text-base md:text-lg opacity-80">
                     {imovel.descricao.completa_md || imovel.descricao.curta}
                   </div>
@@ -230,19 +229,19 @@ const PublicImovelDetails: React.FC = () => {
                </div>
 
                <div className={`p-8 md:p-12 border bg-white shadow-xl space-y-8 ${tid === 'luxe' ? 'rounded-[2rem]' : 'rounded-none'}`}>
-                  <h3 className="text-xl font-black tracking-tight uppercase">Pedir Detalhes</h3>
+                  <h3 className="text-xl font-black tracking-tight uppercase">Pedir Información</h3>
                   {sent ? (
                     <div className="py-12 text-center space-y-4 animate-in zoom-in-90">
                        <div className="w-16 h-16 bg-emerald-50 text-emerald-500 rounded-2xl flex items-center justify-center mx-auto shadow-inner"><Check size={32} strokeWidth={3} /></div>
-                       <h3 className="text-xl font-black text-[#1c2d51]">Pedido Enviado!</h3>
+                       <h3 className="text-xl font-black text-[#1c2d51]">¡Mensaje Enviado!</h3>
                     </div>
                   ) : (
                     <form onSubmit={handleContact} className="space-y-4">
-                       <input required placeholder="Nome" className="detail-input-resp" value={formData.nome} onChange={e => setFormData({...formData, nome: e.target.value})} />
+                       <input required placeholder="Nombre" className="detail-input-resp" value={formData.nome} onChange={e => setFormData({...formData, nome: e.target.value})} />
                        <input required type="email" placeholder="Email" className="detail-input-resp" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
-                       <textarea rows={4} className="detail-input-resp" placeholder="A sua mensagem..." value={formData.mensagem} onChange={e => setFormData({...formData, mensagem: e.target.value})} />
+                       <textarea rows={4} className="detail-input-resp" placeholder="Su mensaje..." value={formData.mensagem} onChange={e => setFormData({...formData, mensagem: e.target.value})} />
                        <button type="submit" disabled={isSending} className="w-full bg-[#1c2d51] text-white py-5 rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl flex items-center justify-center gap-3 transition-all hover:-translate-y-1">
-                          {isSending ? <Loader2 className="animate-spin" /> : <Send size={18}/>} Enviar Contacto
+                          {isSending ? <Loader2 className="animate-spin" /> : <Send size={18}/>} Contactar
                        </button>
                     </form>
                   )}

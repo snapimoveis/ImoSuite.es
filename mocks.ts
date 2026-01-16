@@ -1,4 +1,3 @@
-
 import { Imovel } from './types';
 
 export const MOCK_IMOVEIS: Imovel[] = [
@@ -6,8 +5,8 @@ export const MOCK_IMOVEIS: Imovel[] = [
     id: '1',
     tenant_id: 'default-tenant-uuid',
     ref: 'IMO-101',
-    titulo: 'Moderno Apartamento T2 com Vista Rio',
-    slug: 'apartamento-t2-vista-rio-lisboa',
+    titulo: 'Moderno Piso T2 con Vistas al Río',
+    slug: 'piso-t2-vistas-rio-madrid',
     tipo_imovel: 'apartamento',
     subtipo_imovel: null,
     tipology: 'T2',
@@ -19,15 +18,15 @@ export const MOCK_IMOVEIS: Imovel[] = [
     arrendamento_duracao_min_meses: null,
     disponivel_imediato: true,
     localizacao: {
-      pais: 'Portugal',
-      distrito: 'Lisboa',
-      concelho: 'Lisboa',
+      pais: 'España',
+      distrito: 'Madrid',
+      concelho: 'Madrid',
       freguesia: null,
-      codigo_postal: '1000-001',
-      morada: 'Avenida da Liberdade',
+      codigo_postal: '28001',
+      morada: 'Avenida de la Castellana',
       porta: '1',
-      lat: 38.7167,
-      lng: -9.1392,
+      lat: 40.4167,
+      lng: -3.7037,
       expor_morada: false
     },
     areas: {
@@ -50,8 +49,7 @@ export const MOCK_IMOVEIS: Imovel[] = [
       piscina: false,
       jardim: false
     },
-    caracteristicas: ['Ar Condicionado', 'Varanda', 'Cozinha Equipada', 'Elevador'],
-    // Fix: Updated certificacao property names to match Imovel type in types.ts (Lines 56-61)
+    caracteristicas: ['Aire Acondicionado', 'Terraza', 'Cocina Equipada', 'Ascensor'],
     certificacao: {
       certificado_energetico: 'A',
       licenca_util_numero: '123',
@@ -70,8 +68,8 @@ export const MOCK_IMOVEIS: Imovel[] = [
       despesas_incluidas: []
     },
     descricao: {
-      curta: 'Moderno Apartamento T2 com Vista Rio em Lisboa',
-      completa_md: 'Excelente apartamento renovado com acabamentos de luxo. Localizado numa das zonas mais prestigiadas da cidade, oferece uma vista deslumbrante sobre o Rio Tejo. \n\nComposto por sala ampla, cozinha totalmente equipada e dois quartos com roupeiros embutidos.',
+      curta: 'Moderno Piso T2 con Vistas al Río en Madrid',
+      completa_md: 'Excelente piso reformado con acabados de lujo. Ubicado en una de las zonas más prestigiosas de la ciudad, ofrece una vista deslumbrante.\n\nCompuesto por salón amplio, cocina totalmente equipada y dos dormitorios con armarios empotrados.',
       gerada_por_ia: false,
       ultima_geracao_ia_at: null
     },
@@ -79,9 +77,9 @@ export const MOCK_IMOVEIS: Imovel[] = [
       cover_media_id: 'm1',
       total: 3,
       items: [
-        { id: 'm1', type: 'image', url: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&q=80', storage_path: '', order: 0, is_cover: true, alt: 'Sala de Estar', created_at: new Date().toISOString() },
-        { id: 'm1-2', type: 'image', url: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&q=80', storage_path: '', order: 1, is_cover: false, alt: 'Cozinha Moderna', created_at: new Date().toISOString() },
-        { id: 'm1-3', type: 'image', url: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=1200&q=80', storage_path: '', order: 2, is_cover: false, alt: 'Quarto principal', created_at: new Date().toISOString() }
+        { id: 'm1', type: 'image', url: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&q=80', storage_path: '', order: 0, is_cover: true, alt: 'Salón', created_at: new Date().toISOString() },
+        { id: 'm1-2', type: 'image', url: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&q=80', storage_path: '', order: 1, is_cover: false, alt: 'Cocina Moderna', created_at: new Date().toISOString() },
+        { id: 'm1-3', type: 'image', url: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=1200&q=80', storage_path: '', order: 2, is_cover: false, alt: 'Dormitorio principal', created_at: new Date().toISOString() }
       ]
     },
     publicacao: {
@@ -103,8 +101,8 @@ export const MOCK_IMOVEIS: Imovel[] = [
     id: '2',
     tenant_id: 'default-tenant-uuid',
     ref: 'IMO-102',
-    titulo: 'Moradia de Luxo V4 com Piscina Privada',
-    slug: 'moradia-luxo-v4-cascais',
+    titulo: 'Chalet de Lujo V4 con Piscina Privada',
+    slug: 'chalet-lujo-v4-marbella',
     tipo_imovel: 'moradia',
     subtipo_imovel: null,
     tipology: 'V4',
@@ -116,15 +114,15 @@ export const MOCK_IMOVEIS: Imovel[] = [
     arrendamento_duracao_min_meses: null,
     disponivel_imediato: true,
     localizacao: {
-      pais: 'Portugal',
-      distrito: 'Lisboa',
-      concelho: 'Cascais',
+      pais: 'España',
+      distrito: 'Málaga',
+      concelho: 'Marbella',
       freguesia: null,
-      codigo_postal: '2750-001',
-      morada: 'Quinta da Marinha',
+      codigo_postal: '29600',
+      morada: 'Urbanización Lujo',
       porta: '12',
-      lat: 38.7000,
-      lng: -9.4500,
+      lat: 36.5100,
+      lng: -4.8800,
       expor_morada: false
     },
     areas: {
@@ -147,8 +145,7 @@ export const MOCK_IMOVEIS: Imovel[] = [
       piscina: true,
       jardim: true
     },
-    caracteristicas: ['Piscina', 'Jardim', 'Lareira', 'Domótica'],
-    // Fix: Updated certificacao property names to match types.ts (Lines 153-158)
+    caracteristicas: ['Piscina', 'Jardín', 'Chimenea', 'Domótica'],
     certificacao: {
       certificado_energetico: 'A+',
       licenca_util_numero: '456',
@@ -167,8 +164,8 @@ export const MOCK_IMOVEIS: Imovel[] = [
       despesas_incluidas: []
     },
     descricao: {
-      curta: 'Moradia de Luxo V4 com Piscina Privada em Cascais',
-      completa_md: 'Fantástica moradia isolada inserida num lote de 600m². Design contemporâneo com grandes superfícies vidradas que permitem uma excelente entrada de luz natural. \n\nJardim com rega automática e piscina de sal aquecida.',
+      curta: 'Chalet de Lujo V4 con Piscina Privada en Marbella',
+      completa_md: 'Fantástica vivienda unifamiliar en parcela de 600m². Diseño contemporáneo con amplios ventanales que permiten una excelente entrada de luz natural.\n\nJardín con riego automático y piscina de cloración salina.',
       gerada_por_ia: false,
       ultima_geracao_ia_at: null
     },
@@ -176,9 +173,9 @@ export const MOCK_IMOVEIS: Imovel[] = [
       cover_media_id: 'm2',
       total: 3,
       items: [
-        { id: 'm2', type: 'image', url: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&q=80', storage_path: '', order: 0, is_cover: true, alt: 'Exterior Moradia', created_at: new Date().toISOString() },
+        { id: 'm2', type: 'image', url: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&q=80', storage_path: '', order: 0, is_cover: true, alt: 'Exterior Chalet', created_at: new Date().toISOString() },
         { id: 'm2-2', type: 'image', url: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1200&q=80', storage_path: '', order: 1, is_cover: false, alt: 'Piscina', created_at: new Date().toISOString() },
-        { id: 'm2-3', type: 'image', url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80', storage_path: '', order: 2, is_cover: false, alt: 'Fachada Noturna', created_at: new Date().toISOString() }
+        { id: 'm2-3', type: 'image', url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80', storage_path: '', order: 2, is_cover: false, alt: 'Fachada Nocturna', created_at: new Date().toISOString() }
       ]
     },
     publicacao: {
@@ -200,8 +197,8 @@ export const MOCK_IMOVEIS: Imovel[] = [
     id: '3',
     tenant_id: 'default-tenant-uuid',
     ref: 'IMO-103',
-    titulo: 'Estúdio Moderno em Pleno Centro Histórico',
-    slug: 'estudio-moderno-porto-centro',
+    titulo: 'Estudio Moderno en Centro Histórico',
+    slug: 'estudio-moderno-madrid-centro',
     tipo_imovel: 'apartamento',
     subtipo_imovel: null,
     tipology: 'T0',
@@ -213,15 +210,15 @@ export const MOCK_IMOVEIS: Imovel[] = [
     arrendamento_duracao_min_meses: 12,
     disponivel_imediato: true,
     localizacao: {
-      pais: 'Portugal',
-      distrito: 'Porto',
-      concelho: 'Porto',
-      freguesia: 'Cedofeita',
-      codigo_postal: '4000-001',
-      morada: 'Rua das Flores',
+      pais: 'España',
+      distrito: 'Madrid',
+      concelho: 'Madrid',
+      freguesia: 'Centro',
+      codigo_postal: '28012',
+      morada: 'Calle Mayor',
       porta: '45',
-      lat: 41.1455,
-      lng: -8.6108,
+      lat: 40.4155,
+      lng: -3.7108,
       expor_morada: true
     },
     areas: {
@@ -244,8 +241,7 @@ export const MOCK_IMOVEIS: Imovel[] = [
       piscina: false,
       jardim: false
     },
-    caracteristicas: ['Mobilado', 'Janelas Duplas', 'Metro à porta'],
-    // Fix: Updated certificacao property names to match types.ts (Lines 250-255)
+    caracteristicas: ['Amueblado', 'Doble Acristalamiento', 'Metro a la puerta'],
     certificacao: {
       certificado_energetico: 'C',
       licenca_util_numero: '789',
@@ -264,8 +260,8 @@ export const MOCK_IMOVEIS: Imovel[] = [
       despesas_incluidas: []
     },
     descricao: {
-      curta: 'Estúdio Moderno em Pleno Centro Histórico do Porto',
-      completa_md: 'Estúdio totalmente recuperado e mobilado no coração do Porto. Ideal para estudantes ou nómadas digitais que pretendem viver a experiência urbana da cidade invicta.',
+      curta: 'Estudio Moderno en pleno Centro Histórico de Madrid',
+      completa_md: 'Estudio totalmente recuperado y amueblado en el corazón de Madrid. Ideal para estudiantes o nómadas digitales que pretenden vivir la experiencia urbana de la capital.',
       gerada_por_ia: false,
       ultima_geracao_ia_at: null
     },
@@ -273,8 +269,8 @@ export const MOCK_IMOVEIS: Imovel[] = [
       cover_media_id: 'm3',
       total: 2,
       items: [
-        { id: 'm3', type: 'image', url: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&q=80', storage_path: '', order: 0, is_cover: true, alt: 'Sala e Quarto', created_at: new Date().toISOString() },
-        { id: 'm3-2', type: 'image', url: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1200&q=80', storage_path: '', order: 1, is_cover: false, alt: 'Kitchenette', created_at: new Date().toISOString() }
+        { id: 'm3', type: 'image', url: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&q=80', storage_path: '', order: 0, is_cover: true, alt: 'Salón Dormitorio', created_at: new Date().toISOString() },
+        { id: 'm3-2', type: 'image', url: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1200&q=80', storage_path: '', order: 1, is_cover: false, alt: 'Cocina Americana', created_at: new Date().toISOString() }
       ]
     },
     publicacao: {
