@@ -1,0 +1,8 @@
+{
+  "name": "IImoSuite.es SaaS",
+  "description": "Uma plataforma SaaS imobiliária profissional white-label com suporte multi-tenant, gestão de imóveis, rastreio de leads e geração de descrições por IA.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ]
+}
