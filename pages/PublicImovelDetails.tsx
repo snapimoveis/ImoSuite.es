@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { collection, query, where, getDocs, limit } from "firebase/firestore";
@@ -13,8 +14,7 @@ import {
 import { formatCurrency } from '../lib/utils';
 import SEO from '../components/SEO';
 import ContactSection from '../components/ContactSection';
-import { DEFAULT_TENANT, DEFAULT_TENANT_CMS } from '../constants';
-import { MOCK_IMOVEIS } from '../mocks';
+import { DEFAULT_TENANT_CMS } from '../constants';
 
 const SpecBox = ({ icon, label, val, tid }: any) => (
   <div className={`p-6 md:p-8 border shadow-sm flex flex-col items-center text-center transition-all hover:shadow-md ${tid === 'prestige' ? 'bg-neutral-900 border-white/5 text-white' : 'bg-white border-slate-100 text-slate-900'} ${tid === 'luxe' ? 'rounded-[1.5rem] md:rounded-[2.5rem]' : tid === 'canvas' ? 'rounded-[1.5rem] md:rounded-[2rem]' : 'rounded-none'}`}>
@@ -41,38 +41,40 @@ const PublicImovelDetails: React.FC = () => {
       if (!agencySlug || !imovelSlug) return;
       setLoading(true);
       try {
-        let tData: Tenant | null = null;
-        if (agencySlug === 'demo-imosuite') {
-          tData = DEFAULT_TENANT;
-          const found = MOCK_IMOVEIS.find(m => m.slug === imovelSlug);
-          if (found) { setImovel(found); setMedia(found.media.items || []); }
-        } else {
-          const tSnap = await getDocs(query(collection(db, "tenants"), where("slug", "==", agencySlug), limit(1)));
-          if (!tSnap.empty) {
-            tData = { id: tSnap.docs[0].id, ...(tSnap.docs[0].data() as any) } as Tenant;
-            const iSnap = await getDocs(query(collection(db, "tenants", tData.id, "properties"), where("slug", "==", imovelSlug), limit(1)));
-            if (!iSnap.empty) {
-              const data = { id: iSnap.docs[0].id, ...(iSnap.docs[0].data() as any) } as Imovel;
-              setImovel(data);
-              const propertyMedia = await PropertyService.getPropertyMedia(tData.id, data.id);
-              setMedia(propertyMedia);
-            }
-          }
-        }
-        if (tData) {
+        const tSnap = await getDocs(query(collection(db, "tenants"), where("slug", "==", agencySlug), limit(1)));
+        if (!tSnap.empty) {
+          const tData = { id: tSnap.docs[0].id, ...(tSnap.docs[0].data() as any) } as Tenant;
           setTenant(tData);
+
+          const iSnap = await getDocs(query(
+            collection(db, "tenants", tData.id, "properties"), 
+            where("slug", "==", imovelSlug), 
+            limit(1)
+          ));
+          
+          if (!iSnap.empty) {
+            const data = { id: iSnap.docs[0].id, ...(iSnap.docs[0].data() as any) } as Imovel;
+            setImovel(data);
+            const propertyMedia = await PropertyService.getPropertyMedia(tData.id, data.id);
+            setMedia(propertyMedia);
+          }
+
           document.documentElement.style.setProperty('--primary', tData.cor_primaria);
           document.documentElement.style.setProperty('--secondary', tData.cor_secundaria || tData.cor_primaria);
         }
-      } catch (err) { console.error(err); } finally { setLoading(false); }
+      } catch (err) { 
+        console.error("Erro ao buscar detalhes reais do imóvel:", err); 
+      } finally { 
+        setLoading(false); 
+      }
     };
     fetchData();
   }, [agencySlug, imovelSlug]);
 
   const displayImages = useMemo(() => {
     if (media.length > 0) return media;
-    if (imovel?.media?.cover_url) return [{ url: imovel.media.cover_url, id: 'cover' }];
-    return [{ url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200', id: 'placeholder' }];
+    if (imovel?.media?.cover_url) return [{ url: imovel.media.cover_url, id: 'cover' } as ImovelMedia];
+    return [{ url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200', id: 'placeholder' } as ImovelMedia];
   }, [media, imovel?.media?.cover_url]);
 
   const nextPhoto = useCallback((e?: React.MouseEvent) => {
@@ -97,7 +99,7 @@ const PublicImovelDetails: React.FC = () => {
     } catch (err) { alert("Error al enviar."); } finally { setIsSending(false); }
   };
 
-  if (loading) return <div className="h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin text-[var(--primary)]" size={48} /></div>;
+  if (loading) return <div className="h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin text-[#1c2d51]" size={48} /></div>;
   if (!imovel || !tenant) return <div className="h-screen flex items-center justify-center font-black text-slate-300">Inmueble no encontrado</div>;
 
   const cms = tenant.cms || DEFAULT_TENANT_CMS;
@@ -124,7 +126,7 @@ const PublicImovelDetails: React.FC = () => {
   const s = styles[tid] || styles.heritage;
 
   return (
-    <div className={`${s.wrapper} min-h-screen flex flex-col overflow-x-hidden selection:bg-[var(--primary)]`}>
+    <div className={`${s.wrapper} min-h-screen flex flex-col overflow-x-hidden selection:bg-[#1c2d51]`}>
       <SEO title={`${imovel.titulo} - ${tenant.nome}`} overrideFullTitle={true} />
       
       <nav className={s.nav}>
@@ -183,13 +185,6 @@ const PublicImovelDetails: React.FC = () => {
                         <button key={idx} onClick={() => setActiveImage(idx)} className={`w-2 h-2 rounded-full transition-all ${activeImage === idx ? 'bg-white w-6' : 'bg-white/40 hover:bg-white/60'}`} />
                       ))}
                    </div>
-
-                   {/* ETIQUETA DA FOTO ATIVA */}
-                   {displayImages[activeImage]?.tag && (
-                     <div className="absolute top-6 right-6 bg-black/60 backdrop-blur-md text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">
-                        {displayImages[activeImage].tag}
-                     </div>
-                   )}
                  </>
                )}
             </div>
