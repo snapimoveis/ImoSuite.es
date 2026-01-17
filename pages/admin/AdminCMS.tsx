@@ -111,6 +111,24 @@ const AdminCMS: React.FC = () => {
     alert(`"${page.title}" añadida a la lista del menú principal. Haga clic en "Publicar en el Sitio Web" para guardar.`);
   };
 
+  const handleMemberPhotoClick = (idx: number) => {
+    setActiveMemberIdx(idx);
+    memberPhotoInputRef.current?.click();
+  };
+
+  const handleMemberPhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.[0] && activeMemberIdx !== null && editingPage) {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const compressed = await compressImage(reader.result as string, 400, 500, 0.7);
+        const newTeam = [...(editingPage.equipa || [])];
+        newTeam[activeMemberIdx].avatar_url = compressed;
+        setEditingPage({ ...editingPage, equipa: newTeam });
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+
   const TabButton = ({ active, onClick, label, icon }: any) => (
     <button onClick={onClick} className={`px-8 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest flex items-center gap-3 transition-all whitespace-nowrap ${active ? 'bg-white text-[#1c2d51] shadow-lg scale-105' : 'text-slate-400 hover:text-slate-600'}`}>
       {icon} {label}
@@ -251,7 +269,156 @@ const AdminCMS: React.FC = () => {
 
                   {pageModalTab === 'team' && (
                     <div className="space-y-8 animate-in fade-in">
-                       <div className="flex justify-between items-center"><h4 className="font-black text-[#1c2d51] uppercase text-xs tracking-widest">Gestión del Equipo Profesional</h4><button onClick={() => setEditingPage({ ...editingPage, equipa: [...(editingPage.equipa || []), { id: crypto.randomUUID(), name: '', role: '', email: '', phone: '', avatar_url: '' }] })} className="bg-blue-50 text-blue-600 px-5 py-2.5 rounded-xl font-black text-[10px] uppercase flex items-center gap-2 hover:bg-blue-100 transition-colors"><Plus size={16}/> Añadir Miembro</button></div>
+                       <div className="flex justify-between items-center border-b border-slate-50 pb-4">
+                          <h4 className="font-black text-[#1c2d51] uppercase text-xs tracking-widest">Gestión del Equipo Profesional</h4>
+                          <button 
+                            onClick={() => setEditingPage({ ...editingPage, equipa: [...(editingPage.equipa || []), { id: crypto.randomUUID(), name: '', role: '', email: '', phone: '', avatar_url: '' }] })} 
+                            className="bg-blue-50 text-blue-600 px-5 py-2.5 rounded-xl font-black text-[10px] uppercase flex items-center gap-2 hover:bg-blue-100 transition-colors"
+                          >
+                            <Plus size={16}/> Añadir Miembro
+                          </button>
+                       </div>
+                       
+                       <input type="file" ref={memberPhotoInputRef} onChange={handleMemberPhotoChange} className="hidden" accept="image/*" />
+                       
+                       <div className="grid grid-cols-1 gap-6">
+                         {(editingPage.equipa || []).map((member, idx) => (
+                           <div key={member.id} className="bg-slate-50 p-6 rounded-[2rem] border border-slate-100 relative group animate-in slide-in-from-bottom-2">
+                             <button 
+                               onClick={() => setEditingPage({ ...editingPage, equipa: editingPage.equipa?.filter((_, i) => i !== idx) })}
+                               className="absolute -top-2 -right-2 bg-white text-red-500 p-2 rounded-xl shadow-md opacity-0 group-hover:opacity-100 transition-opacity border border-red-50"
+                             >
+                               <Trash2 size={16}/>
+                             </button>
+
+                             <div className="flex flex-col md:flex-row gap-6">
+                                <div className="shrink-0 flex flex-col items-center gap-3">
+                                   <div 
+                                     onClick={() => handleMemberPhotoClick(idx)}
+                                     className="w-24 h-24 bg-white rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center cursor-pointer hover:border-[#1c2d51] transition-all overflow-hidden"
+                                   >
+                                      {member.avatar_url ? (
+                                        <img src={member.avatar_url} className="w-full h-full object-cover" alt={member.name} />
+                                      ) : (
+                                        <Camera size={24} className="text-slate-300" />
+                                      )}
+                                   </div>
+                                   <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Foto Perfil</p>
+                                </div>
+                                
+                                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                   <div className="space-y-1">
+                                      <label className="admin-cms-label">Nombre</label>
+                                      <input 
+                                        className="admin-input-cms !py-2.5" 
+                                        value={member.name} 
+                                        onChange={e => {
+                                          const newTeam = [...(editingPage.equipa || [])];
+                                          newTeam[idx].name = e.target.value;
+                                          setEditingPage({...editingPage, equipa: newTeam});
+                                        }} 
+                                      />
+                                   </div>
+                                   <div className="space-y-1">
+                                      <label className="admin-cms-label">Cargo / Función</label>
+                                      <input 
+                                        className="admin-input-cms !py-2.5" 
+                                        value={member.role} 
+                                        onChange={e => {
+                                          const newTeam = [...(editingPage.equipa || [])];
+                                          newTeam[idx].role = e.target.value;
+                                          setEditingPage({...editingPage, equipa: newTeam});
+                                        }} 
+                                      />
+                                   </div>
+                                   <div className="space-y-1">
+                                      <label className="admin-cms-label">Email Profesional</label>
+                                      <input 
+                                        className="admin-input-cms !py-2.5" 
+                                        type="email"
+                                        value={member.email} 
+                                        onChange={e => {
+                                          const newTeam = [...(editingPage.equipa || [])];
+                                          newTeam[idx].email = e.target.value;
+                                          setEditingPage({...editingPage, equipa: newTeam});
+                                        }} 
+                                      />
+                                   </div>
+                                   <div className="space-y-1">
+                                      <label className="admin-cms-label">Teléfono / WhatsApp</label>
+                                      <input 
+                                        className="admin-input-cms !py-2.5" 
+                                        value={member.phone} 
+                                        onChange={e => {
+                                          const newTeam = [...(editingPage.equipa || [])];
+                                          newTeam[idx].phone = e.target.value;
+                                          setEditingPage({...editingPage, equipa: newTeam});
+                                        }} 
+                                      />
+                                   </div>
+                                </div>
+                             </div>
+                           </div>
+                         ))}
+                         
+                         {(editingPage.equipa || []).length === 0 && (
+                           <div className="py-20 text-center bg-white rounded-[2rem] border border-dashed border-slate-200">
+                              <Users size={40} className="mx-auto text-slate-100 mb-4" />
+                              <p className="text-xs font-bold text-slate-300 uppercase tracking-[0.2em]">Ningún miembro añadido todavía.</p>
+                           </div>
+                         )}
+                       </div>
+                    </div>
+                  )}
+
+                  {pageModalTab === 'gallery' && (
+                    <div className="space-y-8 animate-in fade-in">
+                       <div className="flex justify-between items-center border-b border-slate-50 pb-4">
+                          <h4 className="font-black text-[#1c2d51] uppercase text-xs tracking-widest">Galería de Imágenes</h4>
+                          <button 
+                             onClick={() => {
+                               const input = document.createElement('input');
+                               input.type = 'file';
+                               input.multiple = true;
+                               input.accept = 'image/*';
+                               input.onchange = async (e: any) => {
+                                 const files = e.target.files;
+                                 if (files) {
+                                   const newUrls: string[] = [];
+                                   for (let i = 0; i < files.length; i++) {
+                                      const reader = new FileReader();
+                                      const promise = new Promise<string>((resolve) => {
+                                        reader.onloadend = () => resolve(reader.result as string);
+                                        reader.readAsDataURL(files[i]);
+                                      });
+                                      const base64 = await promise;
+                                      const compressed = await compressImage(base64, 1200, 1200, 0.7);
+                                      newUrls.push(compressed);
+                                   }
+                                   setEditingPage({...editingPage, galeria_fotos: [...(editingPage.galeria_fotos || []), ...newUrls]});
+                                 }
+                               };
+                               input.click();
+                             }}
+                             className="bg-blue-50 text-blue-600 px-5 py-2.5 rounded-xl font-black text-[10px] uppercase flex items-center gap-2 hover:bg-blue-100 transition-colors"
+                          >
+                             <Plus size={16}/> Añadir Fotos
+                          </button>
+                       </div>
+                       
+                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          {(editingPage.galeria_fotos || []).map((url, idx) => (
+                             <div key={idx} className="aspect-square bg-slate-50 rounded-2xl overflow-hidden relative group border border-slate-100 shadow-sm">
+                                <img src={url} className="w-full h-full object-cover" alt="Galería" />
+                                <button 
+                                  onClick={() => setEditingPage({...editingPage, galeria_fotos: editingPage.galeria_fotos?.filter((_, i) => i !== idx)})}
+                                  className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                                >
+                                  <Trash2 size={14}/>
+                                </button>
+                             </div>
+                          ))}
+                       </div>
                     </div>
                   )}
                </div>
