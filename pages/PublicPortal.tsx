@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { collection, query, where, getDocs, limit } from "firebase/firestore";
@@ -8,7 +7,8 @@ import { Loader2, Menu, X, Building2 } from 'lucide-react';
 import ImovelCard from '../components/ImovelCard';
 import ContactSection from '../components/ContactSection';
 import SEO from '../components/SEO';
-import { DEFAULT_TENANT_CMS } from '../constants';
+import { DEFAULT_TENANT_CMS, DEFAULT_TENANT } from '../constants';
+import { MOCK_IMOVEIS } from '../mocks';
 
 const PublicPortal: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -22,18 +22,22 @@ const PublicPortal: React.FC = () => {
       if (!slug) return;
       setLoading(true);
       try {
-        const tSnap = await getDocs(query(collection(db, "tenants"), where("slug", "==", slug), limit(1)));
-        if (!tSnap.empty) {
-          const tData = { id: tSnap.docs[0].id, ...(tSnap.docs[0].data() as any) } as Tenant;
+        let tData: Tenant | null = null;
+        let pData: Imovel[] = [];
+        if (slug === 'demo-imosuite') {
+          tData = DEFAULT_TENANT;
+          pData = MOCK_IMOVEIS;
+        } else {
+          const tSnap = await getDocs(query(collection(db, "tenants"), where("slug", "==", slug), limit(1)));
+          if (!tSnap.empty) {
+            tData = { id: tSnap.docs[0].id, ...(tSnap.docs[0].data() as any) } as Tenant;
+            const pSnap = await getDocs(query(collection(db, "tenants", tData.id, "properties"), where("publicacao.publicar_no_site", "==", true)));
+            pData = pSnap.docs.map(doc => ({ id: doc.id, ...(doc.data() as any) } as Imovel));
+          }
+        }
+        if (tData) {
           setTenant(tData);
-
-          const pSnap = await getDocs(query(
-            collection(db, "tenants", tData.id, "properties"), 
-            where("publicacao.publicar_no_site", "==", true)
-          ));
-          const pData = pSnap.docs.map(doc => ({ id: doc.id, ...(doc.data() as any) } as Imovel));
           setImoveis(pData);
-
           document.documentElement.style.setProperty('--primary', tData.cor_primaria);
           document.documentElement.style.setProperty('--secondary', tData.cor_secundaria || tData.cor_primaria);
           
@@ -53,16 +57,12 @@ const PublicPortal: React.FC = () => {
              document.head.appendChild(script2);
           }
         }
-      } catch (err) { 
-        console.error("Erro ao carregar portal real:", err); 
-      } finally { 
-        setLoading(false); 
-      }
+      } catch (err) { console.error(err); } finally { setLoading(false); }
     };
     fetchData();
   }, [slug]);
 
-  if (loading) return <div className="h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin text-[#1c2d51]" size={48} /></div>;
+  if (loading) return <div className="h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin text-[var(--primary)]" size={48} /></div>;
   if (!tenant) return <div className="h-screen flex flex-col items-center justify-center p-10 font-brand"><Building2 size={48} className="text-slate-100 mb-4"/><h2 className="text-xl font-black">Agencia no encontrada.</h2><Link to="/" className="text-blue-500 mt-4 underline">Volver</Link></div>;
 
   const cms = tenant.cms || DEFAULT_TENANT_CMS;
@@ -135,13 +135,9 @@ const PublicPortal: React.FC = () => {
           if (section.type === 'featured') return (
             <section key={section.id} className="py-24 max-w-7xl mx-auto px-6">
                <h2 className={`text-3xl md:text-4xl mb-12 ${s.heading}`}>{section.content.title}</h2>
-               {imoveis.filter(i => i.publicacao.destaque).length === 0 ? (
-                 <div className="py-12 text-center text-slate-300 font-bold uppercase text-[10px] tracking-widest">Sin propiedades destacadas todavía.</div>
-               ) : (
-                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {imoveis.filter(i => i.publicacao.destaque).slice(0, 3).map(i => <ImovelCard key={i.id} imovel={i} />)}
-                 </div>
-               )}
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {imoveis.filter(i => i.publicacao.destaque).slice(0, 3).map(i => <ImovelCard key={i.id} imovel={i} />)}
+               </div>
             </section>
           );
           if (section.type === 'about_mini') return (
@@ -150,6 +146,7 @@ const PublicPortal: React.FC = () => {
                <div className="space-y-6">
                   <h2 className={`text-3xl md:text-4xl ${s.heading}`}>{section.content.title}</h2>
                   <p className="text-lg text-slate-500 leading-relaxed">{section.content.text}</p>
+                  <Link to={`/agencia/${tenant.slug}/p/quienes-somos`} className="text-xs font-black uppercase tracking-widest text-[var(--primary)] border-b-2 border-current pb-1">Saber más</Link>
                </div>
             </section>
           );

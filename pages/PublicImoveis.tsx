@@ -4,10 +4,11 @@ import { useParams, Link } from 'react-router-dom';
 import { collection, query, where, getDocs, limit } from "firebase/firestore";
 import { db } from '../lib/firebase';
 import { Tenant, Imovel } from '../types';
-import { Loader2, Menu, X, Search } from 'lucide-react';
+import { Loader2, Menu, X, Building2, Search } from 'lucide-react';
 import ImovelCard from '../components/ImovelCard';
 import SEO from '../components/SEO';
-import { DEFAULT_TENANT_CMS } from '../constants';
+import { DEFAULT_TENANT_CMS, DEFAULT_TENANT } from '../constants';
+import { MOCK_IMOVEIS } from '../mocks';
 
 const PublicImoveis: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -22,31 +23,31 @@ const PublicImoveis: React.FC = () => {
       if (!slug) return;
       setLoading(true);
       try {
-        const tSnap = await getDocs(query(collection(db, "tenants"), where("slug", "==", slug), limit(1)));
-        if (!tSnap.empty) {
-          const tData = { id: tSnap.docs[0].id, ...(tSnap.docs[0].data() as any) } as Tenant;
+        let tData: Tenant | null = null;
+        let pData: Imovel[] = [];
+        if (slug === 'demo-imosuite') {
+          tData = DEFAULT_TENANT;
+          pData = MOCK_IMOVEIS;
+        } else {
+          const tSnap = await getDocs(query(collection(db, "tenants"), where("slug", "==", slug), limit(1)));
+          if (!tSnap.empty) {
+            tData = { id: tSnap.docs[0].id, ...(tSnap.docs[0].data() as any) } as Tenant;
+            const pSnap = await getDocs(query(collection(db, "tenants", tData.id, "properties"), where("publicacao.publicar_no_site", "==", true)));
+            pData = pSnap.docs.map(doc => ({ id: doc.id, ...(doc.data() as any) } as Imovel));
+          }
+        }
+        if (tData) {
           setTenant(tData);
-          
-          const pSnap = await getDocs(query(
-            collection(db, "tenants", tData.id, "properties"), 
-            where("publicacao.publicar_no_site", "==", true)
-          ));
-          const pData = pSnap.docs.map(doc => ({ id: doc.id, ...(doc.data() as any) } as Imovel));
           setImoveis(pData);
-
           document.documentElement.style.setProperty('--primary', tData.cor_primaria);
           document.documentElement.style.setProperty('--secondary', tData.cor_secundaria || tData.cor_primaria);
         }
-      } catch (err) { 
-        console.error("Erro ao carregar imóveis do portal:", err); 
-      } finally { 
-        setLoading(false); 
-      }
+      } catch (err) { console.error(err); } finally { setLoading(false); }
     };
     fetchData();
   }, [slug]);
 
-  if (loading) return <div className="h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin text-[#1c2d51]" size={48} /></div>;
+  if (loading) return <div className="h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin text-[var(--primary)]" size={48} /></div>;
   if (!tenant) return <div className="h-screen flex items-center justify-center font-black">Agencia no encontrada</div>;
 
   const cms = tenant.cms || DEFAULT_TENANT_CMS;
@@ -97,7 +98,7 @@ const PublicImoveis: React.FC = () => {
         <div className="bg-slate-50 p-6 rounded-[2rem] mb-12 flex items-center gap-4"><Search className="text-slate-300" size={20}/><input placeholder="Buscar inmuebles..." className="bg-transparent outline-none w-full font-bold text-slate-700" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} /></div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
            {filtered.map(i => <ImovelCard key={i.id} imovel={i} />)}
-           {filtered.length === 0 && <div className="col-span-full py-20 text-center text-slate-300 font-bold uppercase tracking-widest">No se encontraron inmuebles en la cartera pública.</div>}
+           {filtered.length === 0 && <div className="col-span-full py-20 text-center text-slate-300 font-bold uppercase tracking-widest">No se encontraron inmuebles.</div>}
         </div>
       </main>
 
