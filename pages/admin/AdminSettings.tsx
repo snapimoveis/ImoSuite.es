@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { useTenant } from '../../contexts/TenantContext';
@@ -7,7 +8,7 @@ import { db } from '../../lib/firebase';
 import { 
   Building2, Brush, Globe, CreditCard, Save, Loader2, Camera, 
   Layout, Star, Zap, CheckCircle2, Search, Link as LinkIcon, BarChart3,
-  Check, AlertTriangle, Copy, ShieldCheck, RefreshCw
+  Check, AlertTriangle, Copy, ShieldCheck, RefreshCw, ChevronRight
 } from 'lucide-react';
 import { Tenant } from '../../types';
 import { compressImage } from '../../lib/utils';
@@ -32,7 +33,7 @@ const AdminSettings: React.FC = () => {
   const logoInputRef = useRef<HTMLInputElement>(null);
   
   const [verifying, setVerifying] = useState(false);
-  const [dnsResults, setDnsResults] = useState<{rootOk: boolean, wwwOk: boolean} | null>(null);
+  const [dnsResults, setDnsResults] = useState<{rootOk: boolean, wwwOk: boolean, status: string} | null>(null);
 
   const queryParams = new URLSearchParams(location.search);
   const activeTab = queryParams.get('tab') || 'general';
@@ -84,147 +85,95 @@ const AdminSettings: React.FC = () => {
 
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
-    } catch (err) { 
-      console.error(err);
-      alert("Error al guardar configuraciones.");
-    } finally { setIsSaving(false); }
+    } catch (err) { console.error(err); alert("Error al guardar."); } finally { setIsSaving(false); }
   };
 
   const handleVerifyDomain = async () => {
     const domain = localTenant.custom_domain;
-    if (!domain || !DomainService.isValidFormat(domain)) {
-      alert("Por favor, introduzca un dominio válido (ej: www.sudominio.com)");
-      return;
-    }
-
+    if (!domain || !DomainService.isValidFormat(domain)) { alert("Introduzca un dominio válido."); return; }
     setVerifying(true);
     try {
       const results = await DomainService.verifyDNS(domain);
       setDnsResults(results);
-      
-      const newStatus = results.status === 'verified' ? 'verified' : 'pending';
-      setLocalTenant(prev => ({ 
-        ...prev, 
-        domain_status: newStatus,
-        domain_checked_at: new Date()
-      }));
-
       if (results.status === 'verified') {
-        const autoActivate = window.confirm("¡DNS verificado con éxito! ¿Desea activar este dominio ahora?");
-        if (autoActivate) {
-           const updated = { ...localTenant, domain_status: 'active' as const, domain_checked_at: serverTimestamp() };
-           await setDoc(doc(db, 'tenants', localTenant.id), updated, { merge: true });
-           setTenant(updated);
-           alert("¡Dominio activado! Puede tardar unos minutos hasta que el SSL se propague.");
-        }
+        const updated = { ...localTenant, domain_status: 'active' as const, domain_checked_at: serverTimestamp() };
+        await setDoc(doc(db, 'tenants', localTenant.id), updated, { merge: true });
+        setTenant(updated as any);
+        alert("¡Dominio activado!");
       }
-    } catch (err) {
-      alert("Error al verificar DNS. Inténtelo de nuevo.");
-    } finally {
-      setVerifying(false);
-    }
-  };
-
-  const copyDnsInstructions = () => {
-    const text = `Configuración DNS ImoSuite:\n1. Tipo: A | Nombre: @ | Valor: ${DNS_RECORDS.A_ROOT}\n2. Tipo: CNAME | Nombre: www | Valor: ${DNS_RECORDS.CNAME_WWW}`;
-    navigator.clipboard.writeText(text);
-    alert("¡Instrucciones copiadas!");
+    } finally { setVerifying(false); }
   };
 
   if (tenantLoading) return <div className="h-40 flex items-center justify-center"><Loader2 className="animate-spin text-[#1c2d51]" /></div>;
 
   return (
     <div className="max-w-6xl mx-auto animate-in fade-in pb-20 font-brand">
-      <div className="flex flex-col md:flex-row items-center justify-between mb-10 gap-4">
+      <div className="flex flex-col md:flex-row items-center justify-between mb-10 gap-6">
         <div>
-          <h1 className="text-3xl font-black text-[#1c2d51] tracking-tighter uppercase">Configuración</h1>
-          <p className="text-slate-400 font-bold uppercase text-[9px] tracking-[0.2em] mt-1">Identidad y Gestión de la Agencia</p>
+          <h1 className="text-4xl font-black text-[#1c2d51] tracking-tighter uppercase">Ajustes del Sistema</h1>
+          <p className="text-slate-400 font-bold uppercase text-[10px] tracking-[0.3em] mt-2">Identidad Corporativa & Hosting</p>
         </div>
-        <button onClick={handleSave} disabled={isSaving} className="w-full md:w-auto bg-[#1c2d51] text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl hover:scale-105 transition-all">
-          {isSaving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />} 
-          {success ? 'Cambios Guardados' : 'Publicar Cambios'}
+        <button onClick={handleSave} disabled={isSaving} className="w-full md:w-auto bg-[#1c2d51] text-white px-12 py-5 rounded-[1.5rem] font-black text-xs uppercase tracking-widest flex items-center justify-center gap-4 shadow-2xl hover:scale-105 transition-all active:scale-95">
+          {isSaving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />} 
+          {success ? 'Configuración Guardada' : 'Guardar Ajustes'}
         </button>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-10">
-        <aside className="lg:w-64 shrink-0">
-          <nav className="flex lg:flex-col gap-2 p-1.5 bg-slate-100 rounded-[2rem]">
-            <TabLink active={activeTab === 'general'} id="general" label="La Agencia" icon={<Building2 size={16}/>} />
-            <TabLink active={activeTab === 'branding'} id="branding" label="Marca y Colores" icon={<Brush size={16}/>} />
-            <TabLink active={activeTab === 'website'} id="website" label="Sitio Web" icon={<Globe size={16}/>} />
-            <TabLink active={activeTab === 'seo'} id="seo" label="SEO & Analytics" icon={<Search size={16}/>} />
-            <TabLink active={activeTab === 'billing'} id="billing" label="Facturación" icon={<CreditCard size={16}/>} />
+      <div className="flex flex-col lg:flex-row gap-12">
+        <aside className="lg:w-72 shrink-0">
+          <nav className="flex lg:flex-col gap-3 p-3 bg-slate-100/50 rounded-[3rem] border border-slate-100 shadow-inner">
+            <TabLink active={activeTab === 'general'} id="general" label="La Agencia" icon={<Building2 size={18}/>} />
+            <TabLink active={activeTab === 'branding'} id="branding" label="Marca y Colores" icon={<Brush size={18}/>} />
+            <TabLink active={activeTab === 'website'} id="website" label="Sitio Web" icon={<Globe size={18}/>} />
+            <TabLink active={activeTab === 'seo'} id="seo" label="SEO & Analytics" icon={<Search size={18}/>} />
+            <TabLink active={activeTab === 'billing'} id="billing" label="Facturación" icon={<CreditCard size={18}/>} />
           </nav>
         </aside>
 
-        <div className="flex-1 bg-white p-8 md:p-12 rounded-[3.5rem] border border-slate-100 shadow-sm min-h-[600px]">
+        <div className="flex-1 bg-white p-10 md:p-14 rounded-[4rem] border border-slate-100 shadow-sm min-h-[650px] relative overflow-hidden">
           {activeTab === 'general' && (
-            <div className="space-y-10 animate-in fade-in duration-300">
-              <div className="flex items-center gap-4 border-b border-slate-50 pb-6">
-                 <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center"><Building2 size={24}/></div>
-                 <div>
-                    <h3 className="text-lg font-black text-[#1c2d51] uppercase tracking-tight">Datos de la Inmobiliaria</h3>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase">Información oficial de la empresa</p>
-                 </div>
+            <div className="space-y-12 animate-in fade-in duration-500">
+              <div className="flex items-center gap-5 border-b border-slate-50 pb-8">
+                 <div className="w-14 h-14 bg-slate-50 text-slate-400 rounded-[1.5rem] flex items-center justify-center shadow-inner"><Building2 size={28}/></div>
+                 <div><h3 className="text-xl font-black text-[#1c2d51] uppercase tracking-tighter">Ficha de la Empresa</h3><p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Datos oficiales y comerciales</p></div>
               </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-2">
-                  <label className="admin-label-sober">Nombre Comercial</label>
-                  <input className="admin-input-sober" value={localTenant.nome} onChange={e => setLocalTenant({...localTenant, nome: e.target.value})} />
-                </div>
-                <div className="space-y-2">
-                  <label className="admin-label-sober">Email de Gestión</label>
-                  <input className="admin-input-sober" value={localTenant.email} onChange={e => setLocalTenant({...localTenant, email: e.target.value})} />
-                </div>
-                <div className="space-y-2">
-                  <label className="admin-label-sober">Teléfono Principal</label>
-                  <input className="admin-input-sober" value={localTenant.telefone || ''} onChange={e => setLocalTenant({...localTenant, telefone: e.target.value})} />
-                </div>
-                <div className="space-y-2">
-                  <label className="admin-label-sober">NIF / CIF</label>
-                  <input className="admin-input-sober" value={localTenant.nif || ''} onChange={e => setLocalTenant({...localTenant, nif: e.target.value})} />
-                </div>
-                <div className="md:col-span-2 space-y-2">
-                  <label className="admin-label-sober">Dirección Sede</label>
-                  <input className="admin-input-sober" value={localTenant.morada || ''} onChange={e => setLocalTenant({...localTenant, morada: e.target.value})} />
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div className="space-y-2"><label className="admin-label-sober">Nombre Comercial</label><input className="admin-input-sober" value={localTenant.nome} onChange={e => setLocalTenant({...localTenant, nome: e.target.value})} /></div>
+                <div className="space-y-2"><label className="admin-label-sober">Email de Contacto</label><input className="admin-input-sober" value={localTenant.email} onChange={e => setLocalTenant({...localTenant, email: e.target.value})} /></div>
+                <div className="space-y-2"><label className="admin-label-sober">Teléfono Central</label><input className="admin-input-sober" value={localTenant.telefone || ''} onChange={e => setLocalTenant({...localTenant, telefone: e.target.value})} /></div>
+                <div className="space-y-2"><label className="admin-label-sober">CIF / NIF</label><input className="admin-input-sober" value={localTenant.nif || ''} onChange={e => setLocalTenant({...localTenant, nif: e.target.value})} /></div>
+                <div className="md:col-span-2 space-y-2"><label className="admin-label-sober">Dirección Fiscal / Sede</label><input className="admin-input-sober" value={localTenant.morada || ''} onChange={e => setLocalTenant({...localTenant, morada: e.target.value})} /></div>
               </div>
             </div>
           )}
 
           {activeTab === 'branding' && (
-            <div className="space-y-12 animate-in fade-in duration-300">
-              <div className="flex items-center gap-4 border-b border-slate-50 pb-6">
-                 <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center"><Brush size={24}/></div>
-                 <div>
-                    <h3 className="text-lg font-black text-[#1c2d51] uppercase tracking-tight">Imagen de Marca & Colores</h3>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase">Personalice el aspecto visual de su portal</p>
-                 </div>
+            <div className="space-y-12 animate-in fade-in duration-500">
+              <div className="flex items-center gap-5 border-b border-slate-50 pb-8">
+                 <div className="w-14 h-14 bg-slate-50 text-slate-400 rounded-[1.5rem] flex items-center justify-center shadow-inner"><Brush size={28}/></div>
+                 <div><h3 className="text-xl font-black text-[#1c2d51] uppercase tracking-tighter">Identidad Visual</h3><p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Colores y logotipo de marca</p></div>
               </div>
-
-              <div className="grid md:grid-cols-2 gap-12">
-                <div className="space-y-8">
+              <div className="grid md:grid-cols-2 gap-16">
+                <div className="space-y-10">
                   <div className="space-y-4">
-                    <label className="admin-label-sober">Color Primario (Domina el Pie de Página)</label>
-                    <div className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                      <input type="color" className="w-12 h-12 border-none bg-transparent cursor-pointer rounded-lg" value={localTenant.cor_primaria} onChange={e => setLocalTenant({...localTenant, cor_primaria: e.target.value})} />
-                      <span className="font-mono font-black text-xs uppercase">{localTenant.cor_primaria}</span>
+                    <label className="admin-label-sober">Color Primario (Header/Footer)</label>
+                    <div className="flex items-center gap-5 bg-slate-50 p-5 rounded-[1.5rem] border border-slate-100 shadow-inner">
+                      <input type="color" className="w-12 h-12 border-none bg-transparent cursor-pointer rounded-xl shadow-lg" value={localTenant.cor_primaria} onChange={e => setLocalTenant({...localTenant, cor_primaria: e.target.value})} />
+                      <span className="font-mono font-black text-xs uppercase tracking-widest">{localTenant.cor_primaria}</span>
                     </div>
                   </div>
                   <div className="space-y-4">
-                    <label className="admin-label-sober">Color Secundario (Acentos)</label>
-                    <div className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                      <input type="color" className="w-12 h-12 border-none bg-transparent cursor-pointer rounded-lg" value={localTenant.cor_secundaria} onChange={e => setLocalTenant({...localTenant, cor_secundaria: e.target.value})} />
-                      <span className="font-mono font-black text-xs uppercase">{localTenant.cor_secundaria}</span>
+                    <label className="admin-label-sober">Color Secundario (Botones/Links)</label>
+                    <div className="flex items-center gap-5 bg-slate-50 p-5 rounded-[1.5rem] border border-slate-100 shadow-inner">
+                      <input type="color" className="w-12 h-12 border-none bg-transparent cursor-pointer rounded-xl shadow-lg" value={localTenant.cor_secundaria} onChange={e => setLocalTenant({...localTenant, cor_secundaria: e.target.value})} />
+                      <span className="font-mono font-black text-xs uppercase tracking-widest">{localTenant.cor_secundaria}</span>
                     </div>
                   </div>
                 </div>
-                
                 <div className="space-y-4">
-                  <label className="admin-label-sober">Logotipo</label>
-                  <div onClick={() => logoInputRef.current?.click()} className="aspect-video bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-100 p-8 overflow-hidden group transition-all">
-                    {localTenant.logo_url ? <img src={localTenant.logo_url} className="h-full object-contain" alt="Logotipo" /> : <Camera className="text-slate-300" size={32} />}
+                  <label className="admin-label-sober">Logotipo Oficial</label>
+                  <div onClick={() => logoInputRef.current?.click()} className="aspect-video bg-slate-50 rounded-[2.5rem] border-2 border-dashed border-slate-200 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-100 hover:border-blue-300 p-10 overflow-hidden group transition-all shadow-inner">
+                    {localTenant.logo_url ? <img src={localTenant.logo_url} className="h-full object-contain drop-shadow-sm group-hover:scale-105 transition-transform" alt="Logo" /> : <Camera className="text-slate-300" size={48} />}
                     <input type="file" ref={logoInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
                   </div>
                 </div>
@@ -233,215 +182,59 @@ const AdminSettings: React.FC = () => {
           )}
 
           {activeTab === 'website' && (
-            <div className="space-y-10 animate-in fade-in duration-300">
-              <div className="flex items-center gap-4 border-b border-slate-50 pb-6">
-                 <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center"><Globe size={24}/></div>
-                 <div>
-                    <h3 className="text-lg font-black text-[#1c2d51] uppercase tracking-tight">Sitio Web & Dominio</h3>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase">Gestión de su presencia online</p>
-                 </div>
+            <div className="space-y-12 animate-in fade-in duration-500">
+              <div className="flex items-center gap-5 border-b border-slate-50 pb-8">
+                 <div className="w-14 h-14 bg-slate-50 text-slate-400 rounded-[1.5rem] flex items-center justify-center shadow-inner"><Globe size={28}/></div>
+                 <div><h3 className="text-xl font-black text-[#1c2d51] uppercase tracking-tighter">Dominios y Alojamiento</h3><p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Gestione su dirección web</p></div>
               </div>
-
-              <div className="space-y-8 mb-12">
-                 <div className="space-y-2">
-                    <label className="admin-label-sober">Dirección ImoSuite (Por defecto)</label>
-                    <div className="flex items-center bg-slate-100 p-4 rounded-2xl border border-slate-200">
-                       <span className="font-bold text-slate-400 text-sm">{localTenant.slug}.imosuite.es</span>
-                       <LinkIcon size={14} className="ml-auto text-slate-300" />
-                    </div>
-                 </div>
-
-                 {isBusiness && (
-                    <div className="bg-slate-50 rounded-[2.5rem] p-8 md:p-10 border border-slate-200 space-y-8">
-                       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                          <div>
-                             <h4 className="font-black text-[#1c2d51] uppercase text-xs tracking-widest flex items-center gap-2">
-                               Dominio Propio <Zap size={14} className="text-amber-500 fill-current"/>
-                             </h4>
-                             <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1">Conecte su propia marca (ej: www.suinmobiliaria.es)</p>
-                          </div>
-                          
-                          {localTenant.domain_status && (
-                            <span className={`px-4 py-1.5 rounded-full text-[8px] font-black uppercase tracking-widest flex items-center gap-2 border ${
-                              localTenant.domain_status === 'active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
-                              localTenant.domain_status === 'verified' ? 'bg-blue-50 text-blue-600 border-blue-100' :
-                              'bg-amber-50 text-amber-600 border-amber-100'
-                            }`}>
-                              {localTenant.domain_status === 'active' ? <ShieldCheck size={10}/> : <RefreshCw size={10} className="animate-spin-slow"/>}
-                              Estado: {localTenant.domain_status}
-                            </span>
-                          )}
-                       </div>
-
-                       <div className="flex flex-col md:flex-row gap-4">
-                          <input 
-                             className="flex-1 admin-input-sober" 
-                             placeholder="ej: www.su-agencia.es" 
-                             value={localTenant.custom_domain || ''} 
-                             onChange={e => setLocalTenant({...localTenant, custom_domain: e.target.value.toLowerCase().trim()})} 
-                          />
-                          <button 
-                            onClick={handleVerifyDomain} 
-                            disabled={verifying || !localTenant.custom_domain}
-                            className="bg-white border-2 border-slate-200 text-[#1c2d51] px-8 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-slate-100 transition-all disabled:opacity-50"
-                          >
-                            {verifying ? <Loader2 size={14} className="animate-spin" /> : "Verificar DNS"}
-                          </button>
-                       </div>
-
-                       <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-inner space-y-4">
-                          <div className="flex justify-between items-center">
-                             <p className="text-[10px] font-black uppercase text-slate-500">Instrucciones de Configuración</p>
-                             <button onClick={copyDnsInstructions} className="text-[9px] font-black text-blue-500 uppercase flex items-center gap-1 hover:underline">
-                                <Copy size={12}/> Copiar Instrucciones
-                             </button>
-                          </div>
-                          
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                             <div className={`p-4 rounded-2xl border ${dnsResults?.rootOk ? 'bg-emerald-50/50 border-emerald-100' : 'bg-slate-50 border-slate-100'}`}>
-                                <p className="text-[8px] font-black text-slate-400 uppercase mb-2">Registro A (Raíz)</p>
-                                <div className="flex justify-between font-mono text-[10px] font-bold">
-                                   <span>@</span>
-                                   <span className="text-[#1c2d51]">{DNS_RECORDS.A_ROOT}</span>
-                                </div>
-                                {dnsResults && (
-                                   <div className={`mt-2 flex items-center gap-1 text-[8px] font-black uppercase ${dnsResults.rootOk ? 'text-emerald-600' : 'text-red-500'}`}>
-                                      {dnsResults.rootOk ? <Check size={10}/> : <AlertTriangle size={10}/>}
-                                      {dnsResults.rootOk ? 'Configurado' : 'No detectado'}
-                                   </div>
-                                )}
-                             </div>
-                             <div className={`p-4 rounded-2xl border ${dnsResults?.wwwOk ? 'bg-emerald-50/50 border-emerald-100' : 'bg-slate-50 border-slate-100'}`}>
-                                <p className="text-[8px] font-black text-slate-400 uppercase mb-2">Registro CNAME (WWW)</p>
-                                <div className="flex justify-between font-mono text-[10px] font-bold">
-                                   <span>www</span>
-                                   <span className="text-[#1c2d51] truncate ml-4">{DNS_RECORDS.CNAME_WWW}</span>
-                                </div>
-                                {dnsResults && (
-                                   <div className={`mt-2 flex items-center gap-1 text-[8px] font-black uppercase ${dnsResults.wwwOk ? 'text-emerald-600' : 'text-red-500'}`}>
-                                      {dnsResults.wwwOk ? <Check size={10}/> : <AlertTriangle size={10}/>}
-                                      {dnsResults.wwwOk ? 'Configurado' : 'No detectado'}
-                                   </div>
-                                )}
-                             </div>
-                          </div>
-                          <p className="text-[9px] text-slate-400 italic">La propagación de nuevas configuraciones DNS puede tardar hasta 24 horas.</p>
-                       </div>
-                    </div>
-                 )}
-              </div>
-
-              <h4 className="text-[10px] font-black uppercase text-slate-300 tracking-[0.2em] mb-6">Catálogo de Plantillas</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {TEMPLATE_OPTIONS.map((tmpl) => (
-                  <div key={tmpl.id} onClick={() => setLocalTenant({ ...localTenant, template_id: tmpl.id })} className={`p-8 rounded-[2.5rem] border-2 cursor-pointer transition-all ${localTenant.template_id === tmpl.id ? 'border-[#1c2d51] bg-[#1c2d51]/5 shadow-lg' : 'border-slate-100 bg-white hover:border-slate-200'}`}>
-                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 mb-6">{tmpl.icon}</div>
-                    <h4 className="font-black text-lg text-[#1c2d51]">{tmpl.name}</h4>
-                    <p className="text-xs text-slate-400 font-bold uppercase mt-1">{tmpl.desc}</p>
-                    {localTenant.template_id === tmpl.id && <div className="mt-4 flex items-center gap-2 text-emerald-500 font-black text-[9px] uppercase"><CheckCircle2 size={14}/> Activa</div>}
-                  </div>
-                ))}
-              </div>
+              
+              {isBusiness && (
+                <div className="bg-slate-50/50 rounded-[3rem] p-10 border border-slate-100 space-y-10 shadow-inner">
+                   <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+                      <div className="text-center md:text-left"><h4 className="font-black text-[#1c2d51] uppercase text-sm tracking-widest flex items-center gap-3 justify-center md:justify-start">Dominio Personalizado <Zap size={18} className="text-amber-500 fill-current"/></h4><p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2">Vincule su propia marca (ej: www.su-agencia.es)</p></div>
+                      {localTenant.domain_status && (<span className={`px-5 py-2 rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-3 border shadow-sm ${localTenant.domain_status === 'active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>{localTenant.domain_status === 'active' ? <ShieldCheck size={14}/> : <RefreshCw size={14} className="animate-spin"/>} {localTenant.domain_status}</span>)}
+                   </div>
+                   <div className="flex flex-col md:flex-row gap-4"><input className="flex-1 admin-input-sober !bg-white" placeholder="ej: www.suinmobiliaria.es" value={localTenant.custom_domain || ''} onChange={e => setLocalTenant({...localTenant, custom_domain: e.target.value.toLowerCase().trim()})} /><button onClick={handleVerifyDomain} disabled={verifying || !localTenant.custom_domain} className="bg-[#1c2d51] text-white px-10 py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:scale-105 transition-all shadow-xl active:scale-95">{verifying ? <Loader2 size={16} className="animate-spin" /> : "Verificar DNS"}</button></div>
+                   
+                   <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-md space-y-6">
+                      <div className="flex justify-between items-center"><p className="text-[10px] font-black uppercase text-slate-500 tracking-[0.2em]">Instrucciones DNS</p><button className="text-[9px] font-black text-blue-500 uppercase flex items-center gap-2 hover:underline"><Copy size={14}/> Copiar Registros</button></div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                         <div className="p-5 bg-slate-50 rounded-2xl border border-slate-100"><p className="text-[8px] font-black text-slate-400 uppercase mb-3 tracking-widest">Registro A (Host @)</p><div className="flex justify-between font-mono text-xs font-bold text-[#1c2d51]"><span>@</span><span>{DNS_RECORDS.A_ROOT}</span></div></div>
+                         <div className="p-5 bg-slate-50 rounded-2xl border border-slate-100"><p className="text-[8px] font-black text-slate-400 uppercase mb-3 tracking-widest">Registro CNAME (www)</p><div className="flex justify-between font-mono text-xs font-bold text-[#1c2d51] truncate"><span>www</span><span className="ml-4">{DNS_RECORDS.CNAME_WWW}</span></div></div>
+                      </div>
+                      <p className="text-[9px] text-slate-400 italic text-center font-bold tracking-widest uppercase">La propagación DNS puede tardar hasta 24 horas.</p>
+                   </div>
+                </div>
+              )}
             </div>
           )}
 
           {activeTab === 'seo' && (
-             <div className="space-y-10 animate-in fade-in duration-300">
-                <div className="flex items-center gap-4 border-b border-slate-50 pb-6">
-                   <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center"><Search size={24}/></div>
-                   <div>
-                      <h3 className="text-lg font-black text-[#1c2d51] uppercase tracking-tight">Optimización SEO & Analytics</h3>
-                      <p className="text-[10px] text-slate-400 font-bold uppercase">Mejore su visibilidad en Google</p>
-                   </div>
+            <div className="space-y-12 animate-in fade-in duration-500">
+                <div className="flex items-center gap-5 border-b border-slate-50 pb-8">
+                   <div className="w-14 h-14 bg-slate-50 text-slate-400 rounded-[1.5rem] flex items-center justify-center shadow-inner"><BarChart3 size={28}/></div>
+                   <div><h3 className="text-xl font-black text-[#1c2d51] uppercase tracking-tighter">Posicionamiento Web</h3><p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">SEO y Analítica de Tráfico</p></div>
                 </div>
-
-                <div className="grid grid-cols-1 gap-8">
-                   <div className="space-y-2">
-                      <label className="admin-label-sober">Título SEO de la Homepage (Meta Title)</label>
-                      <input 
-                        className="admin-input-sober" 
-                        value={localTenant.seo_settings?.meta_title || ''} 
-                        onChange={e => setLocalTenant({...localTenant, seo_settings: {...(localTenant.seo_settings || {}), meta_title: e.target.value}})} 
-                        placeholder="Ej: La Mejor Inmobiliaria en Madrid | Nombre de la Agencia"
-                      />
-                   </div>
-                   <div className="space-y-2">
-                      <label className="admin-label-sober">Descripción SEO (Meta Description)</label>
-                      <textarea 
-                        className="admin-input-sober" 
-                        rows={3}
-                        value={localTenant.seo_settings?.meta_description || ''} 
-                        onChange={e => setLocalTenant({...localTenant, seo_settings: {...(localTenant.seo_settings || {}), meta_description: e.target.value}})} 
-                        placeholder="Describa su agencia en pocas palabras para los motores de búsqueda..."
-                      />
-                   </div>
-                   <div className="space-y-2">
-                      <label className="admin-label-sober">Palabras Clave (Separadas por coma)</label>
-                      <input 
-                        className="admin-input-sober" 
-                        value={localTenant.seo_settings?.keywords || ''} 
-                        onChange={e => setLocalTenant({...localTenant, seo_settings: {...(localTenant.seo_settings || {}), keywords: e.target.value}})} 
-                        placeholder="Inmuebles, Venta, Pisos, Madrid..."
-                      />
-                   </div>
-                   <div className="pt-6 border-t border-slate-50">
-                      <div className="flex items-center gap-4 mb-6">
-                         <div className="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center"><BarChart3 size={20}/></div>
-                         <div>
-                            <h4 className="text-sm font-black text-[#1c2d51] uppercase tracking-tight">Google Analytics</h4>
-                            <p className="text-[9px] text-slate-400 font-bold uppercase">Monitorice el tráfico de su portal</p>
-                         </div>
-                      </div>
-                      <div className="space-y-2">
-                        <label className="admin-label-sober">Measurement ID (G-XXXXXXXXXX)</label>
-                        <input 
-                           className="admin-input-sober" 
-                           value={localTenant.seo_settings?.google_analytics_id || ''} 
-                           onChange={e => setLocalTenant({...localTenant, seo_settings: {...(localTenant.seo_settings || {}), google_analytics_id: e.target.value}})} 
-                           placeholder="G-A1B2C3D4E5"
-                        />
-                      </div>
-                   </div>
+                <div className="grid grid-cols-1 gap-10">
+                   <div className="space-y-2"><label className="admin-label-sober">Meta Title (Homepage)</label><input className="admin-input-sober" value={localTenant.seo_settings?.meta_title || ''} onChange={e => setLocalTenant({...localTenant, seo_settings: {...(localTenant.seo_settings || {}), meta_title: e.target.value}})} placeholder="Ej: Las mejores casas de Madrid | Agencia X" /></div>
+                   <div className="space-y-2"><label className="admin-label-sober">Google Analytics Measurement ID</label><input className="admin-input-sober" value={localTenant.seo_settings?.google_analytics_id || ''} onChange={e => setLocalTenant({...localTenant, seo_settings: {...(localTenant.seo_settings || {}), google_analytics_id: e.target.value}})} placeholder="G-XXXXXXXXXX" /></div>
                 </div>
-             </div>
-          )}
-
-          {activeTab === 'billing' && (
-            <div className="space-y-10 animate-in fade-in duration-300">
-              <div className="flex items-center gap-4 border-b border-slate-50 pb-6">
-                 <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center"><CreditCard size={24}/></div>
-                 <div>
-                    <h3 className="text-lg font-black text-[#1c2d51] uppercase tracking-tight">Suscripción ImoSuite</h3>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase">Gestión de suscripciones y pagos</p>
-                 </div>
-              </div>
-
-              <div className="bg-[#1c2d51] p-10 rounded-[3rem] text-white shadow-2xl relative overflow-hidden">
-                 <div className="relative z-10">
-                    <p className="text-[10px] font-black uppercase text-blue-300 mb-2">Plan Activo</p>
-                    <h4 className="text-4xl font-black mb-10 uppercase tracking-tighter">{tenant.subscription?.plan_id || 'Starter'} Edition</h4>
-                    <button className="bg-white text-[#1c2d51] px-10 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:-translate-y-1 transition-transform">Gestionar Pagos Stripe</button>
-                 </div>
-                 <Zap size={200} className="absolute -right-20 -bottom-20 text-white/5 rotate-12" />
-              </div>
             </div>
           )}
         </div>
       </div>
       <style>{`
-        .admin-label-sober { display: block; font-size: 10px; font-weight: 900; text-transform: uppercase; color: #94a3b8; margin-left: 0.5rem; margin-bottom: 0.5rem; letter-spacing: 0.1em; }
-        .admin-input-sober { width: 100%; padding: 1.15rem 1.4rem; background: #f8fafc; border: 2px solid transparent; border-radius: 1.25rem; outline: none; font-weight: 700; color: #1c2d51; transition: all 0.2s; font-size: 0.95rem; }
-        .admin-input-sober:focus { background: #fff; border-color: #357fb2; }
-        .animate-spin-slow { animation: spin 3s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .admin-label-sober { display: block; font-size: 10px; font-weight: 900; text-transform: uppercase; color: #94a3b8; margin-left: 0.75rem; margin-bottom: 0.75rem; letter-spacing: 0.2em; }
+        .admin-input-sober { width: 100%; padding: 1.25rem 1.6rem; background: #f8fafc; border: 2px solid #f1f5f9; border-radius: 1.5rem; outline: none; font-weight: 700; color: #1c2d51; transition: all 0.3s; font-size: 0.95rem; }
+        .admin-input-sober:focus { background: #fff; border-color: #3b82f6; }
       `}</style>
     </div>
   );
 };
 
 const TabLink = ({ active, id, label, icon }: { active: boolean, id: string, label: string, icon: any }) => (
-  <Link to={`/admin/settings?tab=${id}`} className={`flex items-center gap-4 px-6 py-4 rounded-[1.75rem] font-black text-[11px] uppercase tracking-tight transition-all ${active ? 'bg-white text-[#1c2d51] shadow-md border border-slate-100' : 'text-slate-400 hover:bg-white/50 hover:text-[#1c2d51]'}`}>
-    {icon} {label}
+  <Link to={`/admin/settings?tab=${id}`} className={`flex items-center gap-5 px-8 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-widest transition-all duration-300 ${active ? 'bg-white text-[#1c2d51] shadow-2xl border border-slate-100 scale-105' : 'text-slate-400 hover:bg-white/50 hover:text-[#1c2d51]'}`}>
+    <span className={active ? 'text-blue-500' : 'text-slate-300'}>{icon}</span> {label}
   </Link>
 );
 
